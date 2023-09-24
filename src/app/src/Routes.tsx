@@ -1,5 +1,6 @@
 const Routes = {
-    home: "/home"
+    home: "/home",
+    qr: "/qr",
 }
 
 export default Routes;

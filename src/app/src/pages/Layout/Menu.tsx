@@ -7,7 +7,7 @@ import {
     IonMenuToggle,
     IonText
 } from "@ionic/react";
-import { home } from "ionicons/icons";
+import { home, scan } from "ionicons/icons";
 import React from "react";
 import Routes from "../../Routes";
 
@@ -20,6 +20,10 @@ export const Menu: React.FC = () => {
                         <IonItem button routerLink={Routes.home}>
                             <IonIcon className="ion-margin-end" icon={home} />
                             <IonText>Home</IonText>
+                        </IonItem>
+                        <IonItem button routerLink={Routes.qr}>
+                            <IonIcon className="ion-margin-end" icon={scan} />
+                            <IonText>Scan QR</IonText>
                         </IonItem>
                     </IonList>
                 </IonMenuToggle>
