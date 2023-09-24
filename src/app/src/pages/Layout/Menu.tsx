@@ -5,11 +5,10 @@ import {
     IonList,
     IonMenu,
     IonMenuToggle,
-    IonNavLink,
-    IonText,
+    IonText
 } from "@ionic/react";
-import React from "react";
 import { home } from "ionicons/icons";
+import React from "react";
 import Routes from "../../Routes";
 
 export const Menu: React.FC = () => {
