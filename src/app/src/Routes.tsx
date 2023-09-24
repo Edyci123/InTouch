@@ -1,5 +1,7 @@
 const Routes = {
-    home: "/home"
-}
+    home: "/home",
+    read: "/read",
+    write: "/write",
+};
 
 export default Routes;
