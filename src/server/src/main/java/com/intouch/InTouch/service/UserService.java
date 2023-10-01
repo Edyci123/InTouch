@@ -31,7 +31,7 @@ public class UserService {
 
     public void register(RegisterRequest registerRequest) throws UserAlreadyExistsException {
 
-        if (userRepository.findByEmail(registerRequest.getEmail()).isEmpty()) {
+        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
             throw new UserAlreadyExistsException("User already exists!");
         }
 
