@@ -33,6 +33,10 @@ public class FriendsRepository {
         return query.getResultList();
     }
 
+    public void deleteFriendship(Friends friends) {
+        entityManager.remove(friends);
+    }
+
     public void createFriend(User sender, User receiver, FriendshipStatus status) {
         Friends friends = new Friends(sender, receiver, status);
         entityManager.persist(friends);
