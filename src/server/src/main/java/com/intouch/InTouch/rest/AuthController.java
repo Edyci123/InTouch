@@ -1,11 +1,12 @@
 package com.intouch.InTouch.rest;
 
 import com.intouch.InTouch.entity.User;
-import com.intouch.InTouch.rest.pojos.AuthRequest;
-import com.intouch.InTouch.rest.pojos.AuthResponse;
-import com.intouch.InTouch.rest.pojos.RegisterRequest;
 import com.intouch.InTouch.service.UserService;
 import com.intouch.InTouch.utils.JwtTokenUtil;
+import com.intouch.InTouch.utils.exceptions.UserAlreadyExistsException;
+import com.intouch.InTouch.utils.pojos.auth.AuthRequest;
+import com.intouch.InTouch.utils.pojos.auth.AuthResponse;
+import com.intouch.InTouch.utils.pojos.auth.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.management.InstanceAlreadyExistsException;
 
 @RestController
 @RequestMapping("/auth")
@@ -57,8 +56,8 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
         try {
             userService.register(registerRequest);
-        } catch (InstanceAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exists!");
+        } catch (UserAlreadyExistsException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).build();

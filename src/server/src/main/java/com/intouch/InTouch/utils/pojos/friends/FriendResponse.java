@@ -1,6 +1,6 @@
-package com.intouch.InTouch.rest.pojos;
+package com.intouch.InTouch.utils.pojos.friends;
 
-
+import com.intouch.InTouch.utils.enums.FriendshipStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +10,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthResponse {
-
+public class FriendResponse {
+    private int id;
     private String email;
-
-    private String accessToken;
+    private FriendshipStatus status;
 }
