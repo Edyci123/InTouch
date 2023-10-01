@@ -4,7 +4,9 @@ import com.intouch.InTouch.entity.Friends;
 import com.intouch.InTouch.entity.User;
 import com.intouch.InTouch.repos.FriendsRepository;
 import com.intouch.InTouch.repos.UserRepository;
-import com.intouch.InTouch.rest.pojos.FriendResponse;
+import com.intouch.InTouch.utils.enums.FriendshipStatus;
+import com.intouch.InTouch.utils.pojos.friends.FriendResponse;
+import com.intouch.InTouch.utils.pojos.friends.FriendsListResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.management.InstanceNotFoundException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class FriendsService {
@@ -27,38 +28,60 @@ public class FriendsService {
         this.friendsRepository = friendsRepository;
     }
 
-    public Friends findByUser(int user2Id) throws InstanceNotFoundException {
-
-        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user1 = getUserFromOptional(userRepository.findByEmail(currentUserEmail));
-
-        User user2 = getUserFromOptional(userRepository.findById(user2Id));
-
-        return friendsRepository.findByUsers(user1, user2);
-    }
+//    public Friends findByUser(int user2Id) throws InstanceNotFoundException {
+//
+//        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+//        User user1 = getUserFromOptional(userRepository.findByEmail(currentUserEmail));
+//
+//        User user2 = getUserFromOptional(userRepository.findById(user2Id));
+//
+//        return friendsRepository.findByUsers(user1, user2);
+//    }
 
     @Transactional
     public void createFriendship(int user2Id) throws InstanceNotFoundException {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (currentUserEmail.startsWith(" ")) {
+            currentUserEmail = currentUserEmail.substring(1);
+        }
+        System.out.println(currentUserEmail);
         User user1 = getUserFromOptional(userRepository.findByEmail(currentUserEmail));
         User user2 = getUserFromOptional(userRepository.findById(user2Id));
-        friendsRepository.createFriend(user1, user2, "status");
+        friendsRepository.createFriend(user1, user2, FriendshipStatus.SENT);
+        friendsRepository.createFriend(user2, user1, FriendshipStatus.PENDING);
     }
 
-    public List<FriendResponse> findAllFriends() throws InstanceNotFoundException {
+    @Transactional
+    public void acceptFriendship(int user2Id) throws InstanceNotFoundException {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        currentUserEmail = currentUserEmail.substring(1);
+        if (currentUserEmail.startsWith(" ")) {
+            currentUserEmail = currentUserEmail.substring(1);
+        }
+        User user1 = getUserFromOptional(userRepository.findByEmail(currentUserEmail));
+        User user2 = getUserFromOptional(userRepository.findById(user2Id));
+        List<Friends> friendship = friendsRepository.findByUsers(user1, user2);
+        friendship.get(0).setStatus(FriendshipStatus.ACCEPTED);
+        friendship.get(1).setStatus(FriendshipStatus.ACCEPTED);
+    }
+
+    public FriendsListResponse findAllFriends() throws InstanceNotFoundException {
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (currentUserEmail.startsWith(" ")) {
+            currentUserEmail = currentUserEmail.substring(1);
+        }
         User user = getUserFromOptional(userRepository.findByEmail(currentUserEmail));
-        return friendsRepository.findAllFriendsOfAnUser(user).stream().map(val -> {
+        List<FriendResponse> friendsList = friendsRepository.findAllFriendsOfAnUser(user).stream().map(val -> {
             FriendResponse friendResponse = new FriendResponse();
-            if (val.getUser1().equals(user)) {
-                BeanUtils.copyProperties(val.getUser2(), friendResponse);
-            } else {
-                BeanUtils.copyProperties(val.getUser1(), friendResponse);
-            }
+            BeanUtils.copyProperties(val.getUser2(), friendResponse);
             friendResponse.setStatus(val.getStatus());
             return friendResponse;
-        }).collect(Collectors.toList());
+        }).toList();
+        FriendsListResponse friendsListResponse = new FriendsListResponse();
+        friendsListResponse.setAccepted(friendsList.stream().filter(val -> val.getStatus() == FriendshipStatus.ACCEPTED).toList());
+        friendsListResponse.setSent(friendsList.stream().filter(val -> val.getStatus() == FriendshipStatus.SENT).toList());
+        friendsListResponse.setPending(friendsList.stream().filter(val -> val.getStatus() == FriendshipStatus.PENDING).toList());
+
+        return friendsListResponse;
     }
 
     private User getUserFromOptional(Optional<User> optUser) throws InstanceNotFoundException {

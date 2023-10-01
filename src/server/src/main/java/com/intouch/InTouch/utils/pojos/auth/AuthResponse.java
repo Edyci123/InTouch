@@ -1,4 +1,4 @@
-package com.intouch.InTouch.rest.pojos;
+package com.intouch.InTouch.utils.pojos.auth;
 
 
 import lombok.AllArgsConstructor;

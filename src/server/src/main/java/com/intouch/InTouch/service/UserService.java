@@ -2,7 +2,7 @@ package com.intouch.InTouch.service;
 
 import com.intouch.InTouch.entity.User;
 import com.intouch.InTouch.repos.UserRepository;
-import com.intouch.InTouch.rest.pojos.RegisterRequest;
+import com.intouch.InTouch.utils.pojos.auth.RegisterRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -30,6 +30,16 @@ public class FriendsController {
         }
     }
 
+    @PostMapping("/accept/{userId}")
+    public ResponseEntity<?> acceptFriendRequest(@PathVariable int userId) throws InstanceNotFoundException {
+        try {
+            friendsService.acceptFriendship(userId);
+            return ResponseEntity.ok().build();
+        } catch (InstanceNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id " + userId + " not found.");
+        }
+    }
+
     @PostMapping("/send/{userId}")
     public ResponseEntity<?> sendFriendRequest(@PathVariable int userId) throws InstanceNotFoundException {
         try {

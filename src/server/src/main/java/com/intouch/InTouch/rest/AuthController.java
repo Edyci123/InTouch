@@ -1,9 +1,9 @@
 package com.intouch.InTouch.rest;
 
 import com.intouch.InTouch.entity.User;
-import com.intouch.InTouch.rest.pojos.AuthRequest;
-import com.intouch.InTouch.rest.pojos.AuthResponse;
-import com.intouch.InTouch.rest.pojos.RegisterRequest;
+import com.intouch.InTouch.utils.pojos.auth.AuthRequest;
+import com.intouch.InTouch.utils.pojos.auth.AuthResponse;
+import com.intouch.InTouch.utils.pojos.auth.RegisterRequest;
 import com.intouch.InTouch.service.UserService;
 import com.intouch.InTouch.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;

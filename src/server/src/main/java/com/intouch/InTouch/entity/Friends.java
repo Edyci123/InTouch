@@ -1,5 +1,6 @@
 package com.intouch.InTouch.entity;
 
+import com.intouch.InTouch.utils.enums.FriendshipStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,9 +27,9 @@ public class Friends {
     private User user2;
 
     @Column(name = "status")
-    private String status;
+    private FriendshipStatus status;
 
-    public Friends(User user1, User user2, String status) {
+    public Friends(User user1, User user2, FriendshipStatus status) {
         this.user1 = user1;
         this.user2 = user2;
         this.status = status;
