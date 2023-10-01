@@ -26,6 +26,7 @@ import "./theme/global.scss";
 import { Menu } from "./pages/Layout/Menu";
 import { Home } from "./pages/Home/Home";
 import Routes from "./Routes";
+import { LoginPage } from "./pages/Auth/Login";
 
 setupIonicReact();
 
@@ -36,6 +37,9 @@ const App: React.FC = () => (
             <IonRouterOutlet id="menu-content">
                 <Route exact path={Routes.home}>
                     <Home />
+                </Route>
+                <Route exact path={Routes.login}>
+                    <LoginPage />
                 </Route>
                 <Route exact path="/">
                     <Redirect to={Routes.home} />

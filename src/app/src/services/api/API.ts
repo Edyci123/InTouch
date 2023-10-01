@@ -18,7 +18,6 @@ export class API {
     }
 }
 
-
 const api = new API();
 
 export { api };
