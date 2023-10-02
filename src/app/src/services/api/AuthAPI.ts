@@ -5,6 +5,7 @@ import { BaseAPI } from "./BaseAPI";
 
 export class AuthAPI extends BaseAPI {
     async login(data: IAuth) {
-        return await this.POST<IAuthToken>(this.url(APIRoutes.auth.login), data)
+        const response = await this.POST<IAuthToken>(this.url(APIRoutes.auth.login), data)
+        return response.data;
     }
 }

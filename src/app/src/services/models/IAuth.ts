@@ -2,11 +2,9 @@ import { z } from "zod";
 
 export const requiredError = "This field is required."
 
-const passwordRegex = "^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$";
-
 export const zAuth = z.object({
     email: z.string().email().min(1, {message: requiredError}),
-    password: z.string().regex(RegExp(passwordRegex)),
+    password: z.string().min(5, {message: "The password should be at least 6 characters long."})
 })
 
 export type IAuth = z.infer<typeof zAuth>;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import { BasePage } from "../../components/BasePage/BasePage";
 import {
     IonButton,
@@ -15,7 +15,8 @@ import { Form, SubmitHandler, useForm } from "react-hook-form";
 import { IAuth, zAuth } from "../../services/models/IAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Routes from "../../Routes";
-import styles from "./auth.module.scss"
+import styles from "./auth.module.scss";
+import { api } from "../../services/api/API";
 
 export const LoginPage: React.FC = () => {
     const form = useForm<IAuth>({
@@ -23,7 +24,12 @@ export const LoginPage: React.FC = () => {
         resolver: zodResolver(zAuth),
     });
 
-    const onSubmit: SubmitHandler<IAuth> = async (data) => {};
+    console.log(form.formState.errors);
+
+    const onSubmit: SubmitHandler<IAuth> = async (data) => {
+        const res = await api.auth.login(data);
+        api.setToken(res.accessToken);        
+    };
 
     return (
         <BasePage
@@ -32,7 +38,7 @@ export const LoginPage: React.FC = () => {
             noHeader={true}
             title="Login"
             content={
-                <form onSubmit={() => form.handleSubmit(onSubmit)}>
+                <form id="login-form" onSubmit={form.handleSubmit(onSubmit)}>
                     <IonGrid className="ion-padding">
                         <IonRow>
                             <IonCol className="mt-5 mb-5 ion-text-center">
@@ -44,19 +50,21 @@ export const LoginPage: React.FC = () => {
                         <IonRow className="mt-5">
                             <IonCol size="12">
                                 <IonInput
-                                    label="Email"
-                                    color="primary" 
+                                    mode="md"
+                                    label="Email*"
                                     label-placement="floating"
                                     fill="outline"
-                                    type="password"
-                                    placeholder="Email*"
+                                    type="text"
+                                    //placeholder="Email*"
                                     {...form.register("email")}
                                 />
                             </IonCol>
                             <IonCol className="mt-1" size="12">
                                 <IonInput
+                                    mode="md"
                                     {...form.register("password")}
-                                    label="Password" 
+                                    className={styles["custom-input"]}
+                                    label="Password*"
                                     label-placement="floating"
                                     fill="outline"
                                     type="password"
@@ -69,7 +77,13 @@ export const LoginPage: React.FC = () => {
             }
             footer={
                 <>
-                    <IonButton type="submit" expand="block" shape="round">
+                    <IonButton
+                        type="submit"
+                        form="login-form"
+                        expand="block"
+                        shape="round"
+                        className="ion-padding"
+                    >
                         Login
                     </IonButton>
                     <div className="ion-margin ion-padding-top">
