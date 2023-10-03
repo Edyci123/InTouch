@@ -63,6 +63,11 @@ export const Register: React.FC = () => {
                                     //placeholder="Email*"
                                     {...form.register("email")}
                                 />
+                                {form.formState.errors.email && (
+                                    <IonText color="danger">
+                                        {form.formState.errors.email.message}
+                                    </IonText>
+                                )}
                             </IonCol>
                             <IonCol className="mt-1" size="12">
                                 <IonInput
@@ -75,6 +80,11 @@ export const Register: React.FC = () => {
                                     type="password"
                                     placeholder="Password*"
                                 />
+                                {form.formState.errors.password && (
+                                    <IonText color="danger">
+                                        {form.formState.errors.password.message}
+                                    </IonText>
+                                )}
                             </IonCol>
                         </IonRow>
                     </IonGrid>
