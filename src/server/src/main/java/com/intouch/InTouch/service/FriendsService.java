@@ -61,6 +61,7 @@ public class FriendsService {
         friendship.get(0).setStatus(FriendshipStatus.ACCEPTED);
         friendship.get(1).setStatus(FriendshipStatus.ACCEPTED);
     }
+
     @Transactional
     public void deleteFriendship(int user2Id) throws UserNotFoundException, SameUserFriendshipException {
         User user1 = getUserFromOptional(userRepository.findByEmail(getEmail()));

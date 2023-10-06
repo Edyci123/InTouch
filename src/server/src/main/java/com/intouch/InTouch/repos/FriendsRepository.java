@@ -20,6 +20,10 @@ public class FriendsRepository {
         this.entityManager = entityManager;
     }
 
+    public void update(Friends friends) {
+        entityManager.persist(friends);
+    }
+
     public List<Friends> findByUsers(User user1, User user2) {
         TypedQuery<Friends> query = entityManager.createQuery("SELECT f FROM Friends f WHERE (f.user1=:u1 and f.user2=:u2) or (f.user2=:u1 and f.user1=:u2)", Friends.class);
         query.setParameter("u1", user1);
