@@ -28,6 +28,7 @@ import { Home } from "./pages/Home/Home";
 import Routes from "./Routes";
 import { Login } from "./pages/Auth/Login";
 import { Register } from "./pages/Auth/Register";
+import { PrivateRoutes } from "./PrivateRoutes";
 
 setupIonicReact();
 
@@ -36,17 +37,12 @@ const App: React.FC = () => (
         <IonReactRouter>
             <Menu />
             <IonRouterOutlet id="menu-content">
-                <Route exact path={Routes.home}>
-                    <Home />
-                </Route>
+                <PrivateRoutes />
                 <Route exact path={Routes.login}>
                     <Login />
                 </Route>
                 <Route exact path={Routes.register}>
                     <Register />
-                </Route>
-                <Route exact path="/">
-                    <Redirect to={Routes.home} />
                 </Route>
             </IonRouterOutlet>
         </IonReactRouter>

@@ -15,7 +15,8 @@ import { IRegister, zRegister } from "../../services/models/IAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import styles from "./auth.module.scss";
 import { api } from "../../services/api/API";
-import { useHistory } from "react-router";
+import { Redirect, useHistory } from "react-router";
+import { useAuth } from "../../services/storage/auth.store";
 
 export const Register: React.FC = () => {
     const history = useHistory();
@@ -24,6 +25,8 @@ export const Register: React.FC = () => {
         mode: "all",
         resolver: zodResolver(zRegister),
     });
+
+    const [isLoggedIn] = useAuth((state) => [state.isLoggedIn]);
 
     console.log(form.formState.errors);
 
@@ -35,6 +38,10 @@ export const Register: React.FC = () => {
             console.log("eroare:", e);
         }
     };
+
+    if (isLoggedIn) {
+        return <Redirect to={Routes.home} />;
+    }
 
     return (
         <BasePage
@@ -63,6 +70,11 @@ export const Register: React.FC = () => {
                                     //placeholder="Email*"
                                     {...form.register("email")}
                                 />
+                                {form.formState.errors.email && (
+                                    <IonText color="danger">
+                                        {form.formState.errors.email.message}
+                                    </IonText>
+                                )}
                             </IonCol>
                             <IonCol className="mt-1" size="12">
                                 <IonInput
@@ -75,6 +87,11 @@ export const Register: React.FC = () => {
                                     type="password"
                                     placeholder="Password*"
                                 />
+                                {form.formState.errors.password && (
+                                    <IonText color="danger">
+                                        {form.formState.errors.password.message}
+                                    </IonText>
+                                )}
                             </IonCol>
                         </IonRow>
                     </IonGrid>
