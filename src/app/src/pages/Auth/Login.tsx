@@ -18,8 +18,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Routes from "../../Routes";
 import styles from "./auth.module.scss";
 import { api } from "../../services/api/API";
-import { useHistory } from "react-router";
+import { Redirect, Route, useHistory } from "react-router";
 import { ErrorMessage } from "@hookform/error-message";
+import { useAuth } from "../../services/storage/auth.store";
+import { APIRoutes } from "../../services/api/APIRoutes";
 
 export const Login: React.FC = () => {
     const history = useHistory();
@@ -30,6 +32,8 @@ export const Login: React.FC = () => {
         resolver: zodResolver(zLogin),
     });
 
+    const [login, isLoggedIn] = useAuth((state) => [state.login, state.isLoggedIn]);
+
     console.log(form.formState.errors);
 
     const onSubmit: SubmitHandler<ILogin> = async (data) => {
@@ -37,6 +41,7 @@ export const Login: React.FC = () => {
             setLoading(true);
             const response = await api.auth.login(data);
             api.setToken(response.accessToken);
+            login(response.accessToken);
             history.push("/home");
         } catch (e) {
             console.log("error: ", e);
@@ -47,6 +52,10 @@ export const Login: React.FC = () => {
             setLoading(false);
         }
     };
+
+    if (isLoggedIn) {
+        return <Redirect to={Routes.home} />
+    }
 
     return (
         <BasePage
