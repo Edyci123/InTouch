@@ -1,1 +1,72 @@
-// global styles
+.centered {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+ion-app {
+    background-color: white;
+}
+
+.text-underline {
+    text-decoration: underline;
+}
+
+.no-shadows {
+    box-shadow: none !important;
+}
+
+.fw-700 {
+    font-weight: 700;
+}
+
+.h-100 {
+    height: 100% !important;
+}
+
+.mt-1 {
+    margin-top: 1rem;
+}
+
+.mt-2 {
+    margin-top: 2rem;
+}
+
+.mt-3 {
+    margin-top: 3rem;
+}
+
+.mt-4 {
+    margin-top: 4rem;
+}
+
+.mt-5 {
+    margin-top: 5rem;
+}
+
+.mb-1 {
+    margin-bottom: 1rem;
+}
+
+.mb-2 {
+    margin-bottom: 2rem;
+}
+
+.mb-3 {
+    margin-bottom: 3rem;
+}
+
+.mb-4 {
+    margin-bottom: 4rem;
+}
+
+.mb-5 {
+    margin-bottom: 5rem;
+}
+
+.fs-32 {
+    font-size: 2rem;
+}

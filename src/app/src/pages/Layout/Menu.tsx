@@ -1,17 +1,22 @@
 import {
     IonContent,
+    IonFab,
+    IonFooter,
     IonIcon,
     IonItem,
     IonList,
     IonMenu,
     IonMenuToggle,
-    IonText
+    IonText,
 } from "@ionic/react";
-import { home, scan } from "ionicons/icons";
+import { home, scan, logOut } from "ionicons/icons";
 import React from "react";
 import Routes from "../../Routes";
+import { useAuth } from "../../services/storage/auth.store";
 
 export const Menu: React.FC = () => {
+    const [logout] = useAuth((state) => [state.logout]);
+
     return (
         <IonMenu side="end" contentId="menu-content">
             <IonContent className="ion-padding">
@@ -28,6 +33,20 @@ export const Menu: React.FC = () => {
                     </IonList>
                 </IonMenuToggle>
             </IonContent>
+            <IonFooter className="ion-padding ion-no-border no-shadows">
+                <IonMenuToggle>
+                    <IonList>
+                        <IonItem
+                            button
+                            onClick={() => logout()}
+                            routerLink={Routes.login}
+                        >
+                            <IonIcon className="ion-margin-end" icon={logOut} />
+                            <IonText>Logout</IonText>
+                        </IonItem>
+                    </IonList>
+                </IonMenuToggle>
+            </IonFooter>
         </IonMenu>
     );
 };
