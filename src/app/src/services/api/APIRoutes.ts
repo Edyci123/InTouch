@@ -4,7 +4,8 @@ export const APIRoutes = {
     auth: {
         login: '/auth/login',
         register: '/auth/register',
-        me: "/me"
+        me: "/me",
+        updateAccounts: "/me/update"
     },
 
 }

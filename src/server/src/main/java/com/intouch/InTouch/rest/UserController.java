@@ -23,7 +23,7 @@ public class UserController {
     public ResponseEntity<?> updateAccount(@RequestBody Account account) {
         try {
             userService.updateAccount(account);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (UserNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
