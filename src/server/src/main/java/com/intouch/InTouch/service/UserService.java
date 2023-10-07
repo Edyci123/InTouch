@@ -6,18 +6,23 @@ import com.intouch.InTouch.repos.UserRepository;
 import com.intouch.InTouch.utils.exceptions.UserAlreadyExistsException;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
 import com.intouch.InTouch.utils.pojos.auth.RegisterRequest;
+import com.intouch.InTouch.utils.pojos.users.UserResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -51,6 +56,35 @@ public class UserService {
         BeanUtils.copyProperties(registerRequest, user);
         user.setPassword(encodedPassword(registerRequest.getPassword()));
         userRepository.save(user);
+    }
+
+    public Map<String, Object> getUserPage(String email, int page, int size) {
+        List<UserResponse> userList = new ArrayList<>();
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<User> pageUsers;
+        if (email == null) {
+            pageUsers = userRepository.findAll(pageable);
+        } else {
+            pageUsers = userRepository.findByEmailContaining(email, pageable);
+        }
+
+        userList = pageUsers.getContent().stream()
+                .map(val -> new UserResponse(val.getEmail(), val.getAccount()))
+                .filter(val -> !Objects.equals(val.getEmail(), getEmail()))
+                .collect(Collectors.toList());
+         Map<String, Object> res = new HashMap<>();
+         res.put("users", userList);
+         res.put("currentPage", pageUsers.getNumber());
+         res.put("totalPages", pageUsers.getTotalPages());
+         res.put("totalItems", pageUsers.getTotalElements());
+
+         return res;
+    }
+
+    public UserResponse getCurrentUser() throws UserNotFoundException {
+        User user = getUserFromOptional(userRepository.findByEmail(getEmail()));
+        return new UserResponse(user.getEmail(), user.getAccount());
     }
 
     private String encodedPassword(String password) {

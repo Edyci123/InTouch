@@ -46,18 +46,19 @@ public class FriendsService {
         if (user1.equals(user2)) {
             throw new SameUserFriendshipException("You cannot send a friendRequest to yourself!");
         }
-        friendsRepository.createFriend(user1, user2, FriendshipStatus.SENT);
-        friendsRepository.createFriend(user2, user1, FriendshipStatus.PENDING);
+
+        friendsRepository.save(new Friends(user1, user2, FriendshipStatus.SENT));
+        friendsRepository.save(new Friends(user2, user1, FriendshipStatus.PENDING));
     }
 
     @Transactional
     public void acceptFriendship(int user2Id) throws UserNotFoundException, SameUserFriendshipException {
         User user1 = getUserFromOptional(userRepository.findByEmail(getEmail()));
         User user2 = getUserFromOptional(userRepository.findById(user2Id));
-        List<Friends> friendship = friendsRepository.findByUsers(user1, user2);
         if (user1.equals(user2)) {
             throw new SameUserFriendshipException("You cannot accept a friendRequest from yourself!");
         }
+        List<Friends> friendship = friendsRepository.findByUsers(user1, user2);
         friendship.get(0).setStatus(FriendshipStatus.ACCEPTED);
         friendship.get(1).setStatus(FriendshipStatus.ACCEPTED);
     }
@@ -70,14 +71,14 @@ public class FriendsService {
             throw new SameUserFriendshipException("You cannot delete a friendRequest from yourself!");
         }
         List<Friends> friendship = friendsRepository.findByUsers(user1, user2);
-        friendsRepository.deleteFriendship(friendship.get(0));
-        friendsRepository.deleteFriendship(friendship.get(1));
+        friendsRepository.delete(friendship.get(0));
+        friendsRepository.delete(friendship.get(1));
     }
 
     public FriendsListResponse findAllFriends() throws UserNotFoundException {
 
         User user = getUserFromOptional(userRepository.findByEmail(getEmail()));
-        List<FriendResponse> friendsList = friendsRepository.findAllFriendsOfAnUser(user).stream().map(val -> {
+        List<FriendResponse> friendsList = friendsRepository.findByUser1(user).stream().map(val -> {
             FriendResponse friendResponse = new FriendResponse();
             BeanUtils.copyProperties(val.getUser2(), friendResponse);
             friendResponse.setStatus(val.getStatus());
