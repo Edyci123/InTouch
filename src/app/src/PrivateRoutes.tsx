@@ -5,6 +5,8 @@ import { APIRoutes } from "./services/api/APIRoutes";
 import { IonRouterOutlet } from "@ionic/react";
 import Routes from "./Routes";
 import { Home } from "./pages/Home/Home";
+import { Friends } from "./pages/Friends/Friends";
+import { Settings } from "./pages/Settings/Settings";
 
 export const PrivateRoutes: React.FC = () => {
     const [isLoggedIn] = useAuth((state) => [state.isLoggedIn]);
@@ -17,6 +19,12 @@ export const PrivateRoutes: React.FC = () => {
         <IonRouterOutlet>
             <Route exact path={Routes.home}>
                 <Home />
+            </Route>
+            <Route exact path={Routes.friends}>
+                <Friends />
+            </Route>
+            <Route exact path={Routes.settings}>
+                <Settings />
             </Route>
             <Route exact path="/">
                 <Redirect to={Routes.home} />

@@ -28,7 +28,7 @@ export const BasePage: React.FC<Props> = ({
     footer,
     menu = true,
     backButton = true,
-    noHeader,
+    noHeader = false,
     title,
 }) => {
     return (
@@ -57,7 +57,11 @@ export const BasePage: React.FC<Props> = ({
                     </div>
                 </IonContent>
             )}
-            {footer && <IonFooter className="ion-padding ion-no-border no-shadows">{footer}</IonFooter>}
+            {footer && (
+                <IonFooter className="ion-padding ion-no-border no-shadows">
+                    {footer}
+                </IonFooter>
+            )}
         </IonPage>
     );
 };

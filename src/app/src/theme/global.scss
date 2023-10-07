@@ -11,6 +11,17 @@ ion-app {
     background-color: white;
 }
 
+.grid-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    ion-input {
+        min-height: 2rem !important;
+    }
+}
+
 .text-underline {
     text-decoration: underline;
 }

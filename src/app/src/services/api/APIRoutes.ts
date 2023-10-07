@@ -3,7 +3,8 @@ import axios, { Axios } from "axios";
 export const APIRoutes = {
     auth: {
         login: '/auth/login',
-        register: '/auth/register'
+        register: '/auth/register',
+        me: "/me"
     },
 
 }
