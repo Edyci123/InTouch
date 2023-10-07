@@ -28,11 +28,14 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "account_id")
+    private Account account;
+
     public User(String email, String password) {
         this.email = email;
         this.password = password;
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
