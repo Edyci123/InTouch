@@ -6,10 +6,7 @@ import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/me")
@@ -32,4 +29,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllUsers(
+            @RequestParam(required = false) String email,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        return ResponseEntity.ok(userService.getUserPage(email, page, size));
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getMe() throws UserNotFoundException {
+        return ResponseEntity.ok(userService.getCurrentUser());
+    }
 }

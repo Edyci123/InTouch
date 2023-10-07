@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/friends")
 public class FriendsController {
 
-
     private final FriendsService friendsService;
 
     @Autowired
