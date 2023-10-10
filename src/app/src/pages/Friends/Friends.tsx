@@ -1,7 +1,16 @@
-import { IonCol, IonGrid, IonRow, IonSearchbar } from "@ionic/react";
+import {
+    IonCol,
+    IonFab,
+    IonFabButton,
+    IonGrid,
+    IonIcon,
+    IonRow,
+    IonSearchbar,
+} from "@ionic/react";
 import React from "react";
 import { BasePage } from "../../components/BasePage/BasePage";
 import { FriendCard } from "./FriendCard";
+import { add } from "ionicons/icons";
 
 export const Friends: React.FC = () => {
     return (
@@ -33,6 +42,11 @@ export const Friends: React.FC = () => {
                             </IonCol>
                         </IonRow>
                     </IonGrid>
+                    <IonFab slot="fixed" vertical="bottom" horizontal="end">
+                        <IonFabButton>
+                            <IonIcon icon={add} />
+                        </IonFabButton>
+                    </IonFab>
                 </>
             }
         />
