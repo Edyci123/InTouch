@@ -16,6 +16,10 @@ public class RegisterRequest {
 
     @NotNull
     @Email
+    private String username;
+
+    @NotNull
+    @Email
     private String email;
 
     @NotNull

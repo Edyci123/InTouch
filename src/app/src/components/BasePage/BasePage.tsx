@@ -20,6 +20,7 @@ interface Props {
     title?: string;
     centeredContent?: boolean;
     noHeader?: boolean;
+    scrollable?: boolean;
 }
 
 export const BasePage: React.FC<Props> = ({
@@ -30,6 +31,7 @@ export const BasePage: React.FC<Props> = ({
     backButton = true,
     noHeader = false,
     title,
+    scrollable = true,
 }) => {
     return (
         <IonPage>
@@ -47,7 +49,7 @@ export const BasePage: React.FC<Props> = ({
                 </IonHeader>
             )}
             {content && (
-                <IonContent className="ion-padding">
+                <IonContent className={classNames("ion-padding")}>
                     <div
                         className={classNames({
                             centered: centeredContent,
