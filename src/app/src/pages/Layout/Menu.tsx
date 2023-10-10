@@ -9,7 +9,7 @@ import {
     IonMenuToggle,
     IonText,
 } from "@ionic/react";
-import { home, logOut, people, settings } from "ionicons/icons";
+import { home, logOut, people, scan, settings } from "ionicons/icons";
 import React from "react";
 import Routes from "../../Routes";
 import { useAuth } from "../../services/storage/auth.store";
@@ -29,6 +29,10 @@ export const Menu: React.FC = () => {
                         <IonItem button routerLink={Routes.friends}>
                             <IonIcon className="ion-margin-end" icon={people} />
                             <IonText>Friends</IonText>
+                        </IonItem>
+                        <IonItem button routerLink={Routes.qr}>
+                            <IonIcon className="ion-margin-end" icon={scan} />
+                            <IonText>Scan QR</IonText>
                         </IonItem>
                     </IonList>
                 </IonMenuToggle>

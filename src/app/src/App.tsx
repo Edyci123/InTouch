@@ -26,6 +26,7 @@ import "./theme/global.scss";
 import { Menu } from "./pages/Layout/Menu";
 import { Home } from "./pages/Home/Home";
 import Routes from "./Routes";
+import { QRActions } from "./pages/QRActions/QRActions";
 import { Login } from "./pages/Auth/Login";
 import { Register } from "./pages/Auth/Register";
 import { PrivateRoutes } from "./PrivateRoutes";
