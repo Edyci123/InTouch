@@ -6,6 +6,8 @@ import {
     IonIcon,
     IonRow,
     IonSearchbar,
+    IonSegment,
+    IonSegmentButton,
     IonText,
 } from "@ionic/react";
 import React, { useState } from "react";
@@ -18,6 +20,7 @@ import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 
 export const Friends: React.FC = () => {
     const [showQRModal, setShowQRModal] = useState(false);
+    const [status, setStatus] = useState("accepted");
 
     let somehtign;
 
@@ -26,8 +29,9 @@ export const Friends: React.FC = () => {
         const result = await BarcodeScanner.scan();
         console.log(result);
         somehtign = result;
-
     };
+
+    console.log(status);
 
     return (
         <>
@@ -40,6 +44,31 @@ export const Friends: React.FC = () => {
                             placeholder="Search for friends"
                             mode="ios"
                         />
+                        <div className="ion-padding ion-margin-start ion-margin-end">
+                            <IonSegment
+                                value={status}
+                                onChange={(e) => console.log(e)}
+                            >
+                                <IonSegmentButton
+                                    value={"accepted"}
+                                    onClick={() => setStatus("accepted")}
+                                >
+                                    Friends
+                                </IonSegmentButton>
+                                <IonSegmentButton
+                                    value={"pending"}
+                                    onClick={() => setStatus("pending")}
+                                >
+                                    Pending
+                                </IonSegmentButton>
+                                <IonSegmentButton
+                                    value={"sent"}
+                                    onClick={() => setStatus("sent")}
+                                >
+                                    Sent
+                                </IonSegmentButton>
+                            </IonSegment>
+                        </div>
                         <IonGrid className="no-padding-grid">
                             <IonRow>
                                 <IonCol size="6">
