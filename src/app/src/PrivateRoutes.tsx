@@ -1,13 +1,12 @@
-import React from "react";
-import { useAuth } from "./services/storage/auth.store";
-import { Redirect, Route, Router } from "react-router";
-import { APIRoutes } from "./services/api/APIRoutes";
 import { IonRouterOutlet } from "@ionic/react";
+import React from "react";
+import { Redirect, Route } from "react-router";
 import Routes from "./Routes";
-import { Home } from "./pages/Home/Home";
 import { Friends } from "./pages/Friends/Friends";
-import { Settings } from "./pages/Settings/Settings";
+import { Home } from "./pages/Home/Home";
 import { QRActions } from "./pages/QRActions/QRActions";
+import { Settings } from "./pages/Settings/Settings";
+import { useAuth } from "./services/storage/auth.store";
 
 export const PrivateRoutes: React.FC = () => {
     const [isLoggedIn] = useAuth((state) => [state.isLoggedIn]);
