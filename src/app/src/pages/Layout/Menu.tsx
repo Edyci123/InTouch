@@ -30,10 +30,6 @@ export const Menu: React.FC = () => {
                             <IonIcon className="ion-margin-end" icon={people} />
                             <IonText>Friends</IonText>
                         </IonItem>
-                        <IonItem button routerLink={Routes.qr}>
-                            <IonIcon className="ion-margin-end" icon={scan} />
-                            <IonText>Scan QR</IonText>
-                        </IonItem>
                     </IonList>
                 </IonMenuToggle>
             </IonContent>

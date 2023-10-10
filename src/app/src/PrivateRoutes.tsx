@@ -4,7 +4,6 @@ import { Redirect, Route } from "react-router";
 import Routes from "./Routes";
 import { Friends } from "./pages/Friends/Friends";
 import { Home } from "./pages/Home/Home";
-import { QRActions } from "./pages/QRActions/QRActions";
 import { Settings } from "./pages/Settings/Settings";
 import { useAuth } from "./services/storage/auth.store";
 
@@ -28,9 +27,6 @@ export const PrivateRoutes: React.FC = () => {
             </Route>
             <Route exact path="/">
                 <Redirect to={Routes.home} />
-            </Route>
-            <Route exact path={Routes.qr}>
-                <QRActions />
             </Route>
         </IonRouterOutlet>
     );
