@@ -21,6 +21,7 @@ import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 export const Friends: React.FC = () => {
     const [showQRModal, setShowQRModal] = useState(false);
     const [status, setStatus] = useState("accepted");
+    const [friends, setFriends] = useState();
 
     let somehtign;
 

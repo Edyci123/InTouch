@@ -59,6 +59,20 @@ export const Settings: React.FC = () => {
                         <IonRow className="mb-4">
                             <IonCol size="12" className="grid-input">
                                 <IonLabel className="fw-700 ion-margin-end">
+                                    Username:
+                                </IonLabel>
+                                {/* <IonInput
+                                    {...form.register("username")}
+                                    fill="outline"
+                                    mode="md"
+                                    type="text"
+                                /> */}
+                            </IonCol>
+                        </IonRow>
+
+                        <IonRow className="mb-4">
+                            <IonCol size="12" className="grid-input">
+                                <IonLabel className="fw-700 ion-margin-end">
                                     Facebook:
                                 </IonLabel>
                                 <IonInput

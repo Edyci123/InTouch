@@ -70,7 +70,7 @@ public class UserService {
         }
 
         userList = pageUsers.getContent().stream()
-                .map(val -> new UserResponse(val.getEmail(), val.getAccount()))
+                .map(val -> new UserResponse(val.getEmail(), val.getUsername(), val.getAccount()))
                 .filter(val -> !Objects.equals(val.getEmail(), getEmail()))
                 .collect(Collectors.toList());
          Map<String, Object> res = new HashMap<>();
@@ -84,7 +84,7 @@ public class UserService {
 
     public UserResponse getCurrentUser() throws UserNotFoundException {
         User user = getUserFromOptional(userRepository.findByEmail(getEmail()));
-        return new UserResponse(user.getEmail(), user.getAccount());
+        return new UserResponse(user.getEmail(), user.getUsername(), user.getAccount());
     }
 
     private String encodedPassword(String password) {
