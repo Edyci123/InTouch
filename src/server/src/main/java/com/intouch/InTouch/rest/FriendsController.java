@@ -1,6 +1,7 @@
 package com.intouch.InTouch.rest;
 
 import com.intouch.InTouch.service.FriendsService;
+import com.intouch.InTouch.utils.enums.FriendshipStatus;
 import com.intouch.InTouch.utils.exceptions.SameUserFriendshipException;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,15 @@ public class FriendsController {
             return ResponseEntity.status(HttpStatus.OK).body(friendsService.findAllFriends());
         } catch (UserNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+    }
+
+    @GetMapping("/{status}")
+    public ResponseEntity<?> getFriendsByStatus(@PathVariable String status) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(friendsService.getFriendsByStatus(FriendshipStatus.valueOfLabel(status)));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 

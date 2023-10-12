@@ -2,10 +2,12 @@ import axios, { Axios } from "axios";
 
 export const APIRoutes = {
     auth: {
-        login: '/auth/login',
-        register: '/auth/register',
+        login: "/auth/login",
+        register: "/auth/register",
         me: "/me",
-        updateAccounts: "/me/update"
+        updateAccounts: "/me/update",
     },
-
-}
+    friends: {
+        getByStatus: "/friends/{{status}}",
+    },
+};

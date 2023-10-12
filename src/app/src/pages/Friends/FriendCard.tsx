@@ -10,8 +10,13 @@ import {
 } from "@ionic/react";
 import { logoFacebook, logoInstagram, logoSnapchat } from "ionicons/icons";
 import React from "react";
+import { IFriends } from "../../services/models/IFriends";
 
-export const FriendCard: React.FC = () => {
+interface Props {
+    friend: IFriends;
+}
+
+export const FriendCard: React.FC<Props> = ({friend}) => {
     return (
         <IonCard className="ion-no-padding m-1" button>
             <IonCardContent className="ion-no-padding ion-no-margin">
@@ -23,7 +28,7 @@ export const FriendCard: React.FC = () => {
                         <IonCol size="7">
                             <div className="centered">
                                 <div>
-                                    <IonText>Username</IonText>
+                                    <IonText>{friend.email}</IonText>
                                 </div>
                                 <div>
                                     <IonIcon

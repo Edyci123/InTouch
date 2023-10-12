@@ -26,7 +26,6 @@ import "./theme/global.scss";
 import { Menu } from "./pages/Layout/Menu";
 import { Home } from "./pages/Home/Home";
 import Routes from "./Routes";
-import { QRActions } from "./pages/QRActions/QRActions";
 import { Login } from "./pages/Auth/Login";
 import { Register } from "./pages/Auth/Register";
 import { PrivateRoutes } from "./PrivateRoutes";
@@ -38,15 +37,18 @@ import { api } from "./services/api/API";
 setupIonicReact();
 
 const App: React.FC = () => {
-
-    const [isLoggedIn] = useAuth(state => [state.isLoggedIn]);
-    const [setUser] = useGlobal(state => [state.setUser])
+    const [token, isLoggedIn] = useAuth((state) => [
+        state.token,
+        state.isLoggedIn,
+    ]);
+    const [setUser] = useGlobal((state) => [state.setUser]);
 
     useEffect(() => {
-        if (isLoggedIn) {
-            api.auth.me().then(response => setUser(response));
+        if (isLoggedIn && token) {
+            api.setToken(token);
+            api.auth.me().then((response) => setUser(response));
         }
-    }, [isLoggedIn])
+    }, [isLoggedIn]);
 
     return (
         <IonApp>

@@ -10,29 +10,32 @@ import {
     IonSegmentButton,
     IonText,
 } from "@ionic/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BasePage } from "../../components/BasePage/BasePage";
 import { FriendCard } from "./FriendCard";
 import { add, qrCode } from "ionicons/icons";
 import { ShowQRModal } from "./Modals/ShowQRModal";
 import { Camera } from "@capacitor/camera";
 import { BarcodeScanner } from "@ionic-native/barcode-scanner";
+import { api } from "../../services/api/API";
+import { IFriends } from "../../services/models/IFriends";
 
 export const Friends: React.FC = () => {
     const [showQRModal, setShowQRModal] = useState(false);
     const [status, setStatus] = useState("accepted");
-    const [friends, setFriends] = useState();
-
-    let somehtign;
+    const [friends, setFriends] = useState<IFriends[]>([]);
 
     const scanQRCode = async () => {
         await Camera.requestPermissions();
         const result = await BarcodeScanner.scan();
         console.log(result);
-        somehtign = result;
     };
 
-    console.log(status);
+    useEffect(() => {
+        api.friends
+            .getFriendsByStatus(status)
+            .then((res) => setFriends(res.friends));
+    }, [setFriends, status]);
 
     return (
         <>
@@ -72,24 +75,19 @@ export const Friends: React.FC = () => {
                         </div>
                         <IonGrid className="no-padding-grid">
                             <IonRow>
-                                <IonCol size="6">
-                                    <FriendCard />
-                                </IonCol>
-                                <IonCol size="6">
-                                    <FriendCard />
-                                </IonCol>
-                                <IonCol size="6">
-                                    <FriendCard />
-                                </IonCol>
-                                <IonCol size="6">
-                                    <FriendCard />
-                                </IonCol>
-                                <IonCol size="6">
-                                    <FriendCard />
-                                </IonCol>
+                                {friends.length !== 0 ? (
+                                    friends.map((friend) => (
+                                        <IonCol size="12">
+                                            <FriendCard friend={friend} />
+                                        </IonCol>
+                                    ))
+                                ) : (
+                                    <IonCol className="ion-text-center">
+                                        <IonText>No friends!</IonText>
+                                    </IonCol>
+                                )}
                             </IonRow>
                         </IonGrid>
-                        <IonText>{somehtign}</IonText>
                         <IonFab slot="fixed" vertical="bottom" horizontal="end">
                             <IonFabButton onClick={() => scanQRCode()}>
                                 <IonIcon icon={add} />
