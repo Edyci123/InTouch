@@ -52,11 +52,16 @@ export const FriendCard: React.FC<Props> = ({
                                         size="small"
                                         className={classNames(
                                             "ion-no-margin",
-                                            styles["close-button"],
+                                            styles["close-button"]
                                         )}
-                                        onClick={() => handleCancelFriendRequest()}
+                                        onClick={() =>
+                                            handleCancelFriendRequest()
+                                        }
                                     >
-                                        <IonIcon icon={close} />
+                                        <IonIcon
+                                            slot="icon-only"
+                                            icon={close}
+                                        />
                                     </IonButton>
                                 )}
                                 <div></div>
@@ -93,8 +98,7 @@ export const FriendCard: React.FC<Props> = ({
                                         </IonButton>
                                         <IonButton
                                             size="small"
-                                            color="light"
-                                            className="reject-text-color"
+                                            className={styles["reject-button"]}
                                             onClick={() => handleReject()}
                                         >
                                             Reject
