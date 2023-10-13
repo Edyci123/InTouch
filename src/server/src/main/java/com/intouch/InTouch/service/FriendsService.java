@@ -41,9 +41,9 @@ public class FriendsService {
 //    }
 
     @Transactional
-    public void createFriendship(int user2Id) throws UserNotFoundException, SameUserFriendshipException {
+    public void createFriendship(String email) throws UserNotFoundException, SameUserFriendshipException {
         User user1 = getUserFromOptional(userRepository.findByEmail(getEmail()));
-        User user2 = getUserFromOptional(userRepository.findById(user2Id));
+        User user2 = getUserFromOptional(userRepository.findByEmail(email));
         if (user1.equals(user2)) {
             throw new SameUserFriendshipException("You cannot send a friendRequest to yourself!");
         }
@@ -99,7 +99,9 @@ public class FriendsService {
         friendsListResponse.setFriends(
                 friendsRepository.findByUser1AndStatus(user, status)
                         .stream().map(val ->
-                                new FriendResponse(val.getUser2().getId(), val.getUser2().getEmail(), val.getStatus()))
+                                new FriendResponse(val.getUser2().getId(),
+                                        val.getUser2().getEmail(), val.getUser2().getUname(), val.getStatus(), val.getUser2().getAccount())
+                        )
                         .toList());
         return friendsListResponse;
     }

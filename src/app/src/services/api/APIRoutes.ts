@@ -9,5 +9,8 @@ export const APIRoutes = {
     },
     friends: {
         getByStatus: "/friends/{{status}}",
+        deleteFriendship: "/friends/delete/{{userId}}",
+        acceptFriendRequest: "/friends/accept/{{userId}}",
+        sendFriendRequests: "/friends/send",
     },
 };

@@ -1,9 +1,9 @@
 package com.intouch.InTouch.utils.enums;
 
 public enum FriendshipStatus {
-    SENT("sent"),
-    PENDING("pending"),
-    ACCEPTED("accepted");
+    SENT("SENT"),
+    PENDING("PENDING"),
+    ACCEPTED("ACCEPTED");
 
     public final String label;
 

@@ -18,17 +18,18 @@ import { ShowQRModal } from "./Modals/ShowQRModal";
 import { Camera } from "@capacitor/camera";
 import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import { api } from "../../services/api/API";
-import { IFriends } from "../../services/models/IFriends";
+import { FriendshipStatus, IFriends } from "../../services/models/IFriends";
 
 export const Friends: React.FC = () => {
     const [showQRModal, setShowQRModal] = useState(false);
-    const [status, setStatus] = useState("accepted");
+    const [status, setStatus] = useState(FriendshipStatus.accepted);
     const [friends, setFriends] = useState<IFriends[]>([]);
 
     const scanQRCode = async () => {
         await Camera.requestPermissions();
         const result = await BarcodeScanner.scan();
-        console.log(result);
+        await api.friends.sendFriendRequest(result.text);
+        setStatus(FriendshipStatus.accepted);
     };
 
     useEffect(() => {
@@ -36,6 +37,17 @@ export const Friends: React.FC = () => {
             .getFriendsByStatus(status)
             .then((res) => setFriends(res.friends));
     }, [setFriends, status]);
+
+    const getEmptyArrayMessage = () => {
+        switch (status) {
+            case FriendshipStatus.pending:
+                return "There are no pending friend requests!";
+            case FriendshipStatus.accepted:
+                return "You have no friends here:(";
+            case FriendshipStatus.sent:
+                return "You have no sent friend requests!";
+        }
+    };
 
     return (
         <>
@@ -54,20 +66,26 @@ export const Friends: React.FC = () => {
                                 onChange={(e) => console.log(e)}
                             >
                                 <IonSegmentButton
-                                    value={"accepted"}
-                                    onClick={() => setStatus("accepted")}
+                                    value={FriendshipStatus.accepted}
+                                    onClick={() =>
+                                        setStatus(FriendshipStatus.accepted)
+                                    }
                                 >
                                     Friends
                                 </IonSegmentButton>
                                 <IonSegmentButton
-                                    value={"pending"}
-                                    onClick={() => setStatus("pending")}
+                                    value={FriendshipStatus.pending}
+                                    onClick={() =>
+                                        setStatus(FriendshipStatus.pending)
+                                    }
                                 >
                                     Pending
                                 </IonSegmentButton>
                                 <IonSegmentButton
-                                    value={"sent"}
-                                    onClick={() => setStatus("sent")}
+                                    value={FriendshipStatus.sent}
+                                    onClick={() =>
+                                        setStatus(FriendshipStatus.sent)
+                                    }
                                 >
                                     Sent
                                 </IonSegmentButton>
@@ -76,14 +94,51 @@ export const Friends: React.FC = () => {
                         <IonGrid className="no-padding-grid">
                             <IonRow>
                                 {friends.length !== 0 ? (
-                                    friends.map((friend) => (
-                                        <IonCol size="12">
-                                            <FriendCard friend={friend} />
+                                    friends.map((friend, index) => (
+                                        <IonCol key={index} size="12">
+                                            <FriendCard
+                                                friend={friend}
+                                                handleAcceptFriendRequest={async () => {
+                                                    await api.friends.acceptFriendRequest(
+                                                        friend.id
+                                                    );
+                                                    setFriends(
+                                                        friends.filter(
+                                                            (val) =>
+                                                                val !== friend
+                                                        )
+                                                    );
+                                                }}
+                                                handleReject={async () => {
+                                                    await api.friends.deleteFriendship(
+                                                        friend.id
+                                                    );
+                                                    setFriends(
+                                                        friends.filter(
+                                                            (val) =>
+                                                                val !== friend
+                                                        )
+                                                    );
+                                                }}
+                                                handleCancelFriendRequest={async () => {
+                                                    await api.friends.deleteFriendship(
+                                                        friend.id
+                                                    );
+                                                    setFriends(
+                                                        friends.filter(
+                                                            (val) =>
+                                                                val !== friend
+                                                        )
+                                                    );
+                                                }}
+                                            />
                                         </IonCol>
                                     ))
                                 ) : (
                                     <IonCol className="ion-text-center">
-                                        <IonText>No friends!</IonText>
+                                        <IonText>
+                                            {getEmptyArrayMessage()}
+                                        </IonText>
                                     </IonCol>
                                 )}
                             </IonRow>

@@ -24,9 +24,13 @@ import { api } from "../../services/api/API";
 export const Settings: React.FC = () => {
     const [user] = useGlobal((state) => [state.user]);
 
+    console.log(user);
+
     const form = useForm<IAccountSettings>({
         mode: "all",
-        values: user ? user.account : undefined,
+        values: user
+            ? { username: user.username, account: user.account }
+            : undefined,
         resolver: zodResolver(zAccountSettings),
     });
 
@@ -61,12 +65,12 @@ export const Settings: React.FC = () => {
                                 <IonLabel className="fw-700 ion-margin-end">
                                     Username:
                                 </IonLabel>
-                                {/* <IonInput
+                                <IonInput
                                     {...form.register("username")}
                                     fill="outline"
                                     mode="md"
                                     type="text"
-                                /> */}
+                                />
                             </IonCol>
                         </IonRow>
 
@@ -76,7 +80,9 @@ export const Settings: React.FC = () => {
                                     Facebook:
                                 </IonLabel>
                                 <IonInput
-                                    {...form.register("facebookUsername")}
+                                    {...form.register(
+                                        "account.facebookUsername"
+                                    )}
                                     fill="outline"
                                     mode="md"
                                     type="text"
@@ -87,7 +93,9 @@ export const Settings: React.FC = () => {
                                     Instagram:
                                 </IonLabel>
                                 <IonInput
-                                    {...form.register("instagramUsername")}
+                                    {...form.register(
+                                        "account.instagramUsername"
+                                    )}
                                     fill="outline"
                                     mode="md"
                                     type="text"
@@ -98,7 +106,9 @@ export const Settings: React.FC = () => {
                                     Snapchat:
                                 </IonLabel>
                                 <IonInput
-                                    {...form.register("snapchatUsername")}
+                                    {...form.register(
+                                        "account.snapchatUsername"
+                                    )}
                                     fill="outline"
                                     mode="md"
                                     type="text"

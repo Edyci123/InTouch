@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "username", unique = true)
-    private String username;
+    private String uname;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id")
