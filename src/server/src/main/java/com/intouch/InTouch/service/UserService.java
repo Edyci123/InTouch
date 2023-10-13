@@ -1,11 +1,11 @@
 package com.intouch.InTouch.service;
 
-import com.intouch.InTouch.entity.Account;
 import com.intouch.InTouch.entity.User;
 import com.intouch.InTouch.repos.UserRepository;
 import com.intouch.InTouch.utils.exceptions.UserAlreadyExistsException;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
 import com.intouch.InTouch.utils.pojos.auth.RegisterRequest;
+import com.intouch.InTouch.utils.pojos.users.PartialUpdateUserRequest;
 import com.intouch.InTouch.utils.pojos.users.UserResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,10 +40,10 @@ public class UserService {
     }
 
     @Transactional
-    public void updateAccount(Account account) throws UserNotFoundException {
+    public void partialUpdateUser(PartialUpdateUserRequest updateUserRequest) throws UserNotFoundException {
         User user = getUserFromOptional(userRepository.findByEmail(getEmail()));
-        user.setAccount(account);
-        userRepository.save(user);
+        user.setAccount(updateUserRequest.getAccounts());
+        user.setUname(updateUserRequest.getUsername());
     }
 
     public void register(RegisterRequest registerRequest) throws UserAlreadyExistsException {
@@ -70,7 +70,7 @@ public class UserService {
         }
 
         userList = pageUsers.getContent().stream()
-                .map(val -> new UserResponse(val.getEmail(), val.getAccount()))
+                .map(val -> new UserResponse(val.getEmail(), val.getUsername(), val.getAccount()))
                 .filter(val -> !Objects.equals(val.getEmail(), getEmail()))
                 .collect(Collectors.toList());
          Map<String, Object> res = new HashMap<>();
@@ -84,7 +84,7 @@ public class UserService {
 
     public UserResponse getCurrentUser() throws UserNotFoundException {
         User user = getUserFromOptional(userRepository.findByEmail(getEmail()));
-        return new UserResponse(user.getEmail(), user.getAccount());
+        return new UserResponse(user.getEmail(), user.getUname(), user.getAccount());
     }
 
     private String encodedPassword(String password) {

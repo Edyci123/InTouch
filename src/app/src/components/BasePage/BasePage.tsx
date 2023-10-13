@@ -20,6 +20,7 @@ interface Props {
     title?: string;
     centeredContent?: boolean;
     noHeader?: boolean;
+    scrollable?: boolean;
 }
 
 export const BasePage: React.FC<Props> = ({
@@ -28,8 +29,9 @@ export const BasePage: React.FC<Props> = ({
     footer,
     menu = true,
     backButton = true,
-    noHeader,
+    noHeader = false,
     title,
+    scrollable = true,
 }) => {
     return (
         <IonPage>
@@ -47,7 +49,7 @@ export const BasePage: React.FC<Props> = ({
                 </IonHeader>
             )}
             {content && (
-                <IonContent className="ion-padding">
+                <IonContent className={classNames("ion-padding")}>
                     <div
                         className={classNames({
                             centered: centeredContent,
@@ -57,7 +59,11 @@ export const BasePage: React.FC<Props> = ({
                     </div>
                 </IonContent>
             )}
-            {footer && <IonFooter className="ion-padding ion-no-border no-shadows">{footer}</IonFooter>}
+            {footer && (
+                <IonFooter className="ion-padding ion-no-border no-shadows">
+                    {footer}
+                </IonFooter>
+            )}
         </IonPage>
     );
 };

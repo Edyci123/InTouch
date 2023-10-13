@@ -1,8 +1,8 @@
 package com.intouch.InTouch.rest;
 
-import com.intouch.InTouch.entity.Account;
 import com.intouch.InTouch.service.UserService;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
+import com.intouch.InTouch.utils.pojos.users.PartialUpdateUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +20,10 @@ public class UserController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<?> updateAccount(@RequestBody Account account) {
+    public ResponseEntity<?> updateAccount(@RequestBody PartialUpdateUserRequest updateUserRequest) {
         try {
-            userService.updateAccount(account);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            userService.partialUpdateUser(updateUserRequest);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (UserNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }

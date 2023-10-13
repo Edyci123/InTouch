@@ -1,6 +1,7 @@
 package com.intouch.InTouch.rest;
 
 import com.intouch.InTouch.service.FriendsService;
+import com.intouch.InTouch.utils.enums.FriendshipStatus;
 import com.intouch.InTouch.utils.exceptions.SameUserFriendshipException;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,16 @@ public class FriendsController {
         }
     }
 
-    @PostMapping("/accept/{userId}")
+    @GetMapping("/{status}")
+    public ResponseEntity<?> getFriendsByStatus(@PathVariable String status) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(friendsService.getFriendsByStatus(FriendshipStatus.valueOfLabel(status)));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/accept/{userId}")
     public ResponseEntity<?> acceptFriendRequest(@PathVariable int userId) {
         try {
             friendsService.acceptFriendship(userId);
@@ -40,11 +50,11 @@ public class FriendsController {
         }
     }
 
-    @PostMapping("/unfriend/{userId}")
-    public ResponseEntity<?> unfriendRequest(@PathVariable int userId) {
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<?> deleteFriendship(@PathVariable int userId) {
         try {
             friendsService.deleteFriendship(userId);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (UserNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id " + userId + " not found.");
         } catch (SameUserFriendshipException ex) {
@@ -52,13 +62,13 @@ public class FriendsController {
         }
     }
 
-    @PostMapping("/send/{userId}")
-    public ResponseEntity<?> sendFriendRequest(@PathVariable int userId) {
+    @PostMapping("/send")
+    public ResponseEntity<?> sendFriendRequest(@RequestBody String email) {
         try {
-            friendsService.createFriendship(userId);
+            friendsService.createFriendship(email);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (UserNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id " + userId + " not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch (SameUserFriendshipException ex) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
         }

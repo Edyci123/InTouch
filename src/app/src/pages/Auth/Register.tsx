@@ -49,6 +49,7 @@ export const Register: React.FC = () => {
             menu={false}
             noHeader={true}
             title="Login"
+            scrollable={false}
             content={
                 <form id="register-form" onSubmit={form.handleSubmit(onSubmit)}>
                     <IonGrid className="ion-padding">
@@ -61,6 +62,21 @@ export const Register: React.FC = () => {
                         </IonRow>
                         <IonRow className="mt-5">
                             <IonCol size="12">
+                                <IonInput
+                                    mode="md"
+                                    label="Username*"
+                                    label-placement="floating"
+                                    fill="outline"
+                                    type="text"
+                                    {...form.register("username")}
+                                />
+                                {form.formState.errors.username && (
+                                    <IonText color="danger">
+                                        {form.formState.errors.username.message}
+                                    </IonText>
+                                )}
+                            </IonCol>
+                            <IonCol className="mt-1" size="12">
                                 <IonInput
                                     mode="md"
                                     label="Email*"
@@ -90,6 +106,26 @@ export const Register: React.FC = () => {
                                 {form.formState.errors.password && (
                                     <IonText color="danger">
                                         {form.formState.errors.password.message}
+                                    </IonText>
+                                )}
+                            </IonCol>
+                            <IonCol className="mt-1" size="12">
+                                <IonInput
+                                    mode="md"
+                                    {...form.register("confirmPassword")}
+                                    className={styles["custom-input"]}
+                                    label="Confirm Password*"
+                                    label-placement="floating"
+                                    fill="outline"
+                                    type="password"
+                                    placeholder="Confirm Password*"
+                                />
+                                {form.formState.errors.confirmPassword && (
+                                    <IonText color="danger">
+                                        {
+                                            form.formState.errors
+                                                .confirmPassword.message
+                                        }
                                     </IonText>
                                 )}
                             </IonCol>
@@ -124,7 +160,7 @@ export const Register: React.FC = () => {
                                             className="text-underline"
                                             color="secondary"
                                         >
-                                            Log in now
+                                            Login now
                                         </IonText>
                                     </IonRouterLink>
                                 </IonCol>

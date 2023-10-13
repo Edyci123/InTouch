@@ -9,6 +9,7 @@ import com.intouch.InTouch.utils.exceptions.SameUserFriendshipException;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
 import com.intouch.InTouch.utils.pojos.friends.FriendResponse;
 import com.intouch.InTouch.utils.pojos.friends.FriendsListResponse;
+import com.intouch.InTouch.utils.pojos.friends.FriendsListsByStatusResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,9 +41,9 @@ public class FriendsService {
 //    }
 
     @Transactional
-    public void createFriendship(int user2Id) throws UserNotFoundException, SameUserFriendshipException {
+    public void createFriendship(String email) throws UserNotFoundException, SameUserFriendshipException {
         User user1 = getUserFromOptional(userRepository.findByEmail(getEmail()));
-        User user2 = getUserFromOptional(userRepository.findById(user2Id));
+        User user2 = getUserFromOptional(userRepository.findByEmail(email));
         if (user1.equals(user2)) {
             throw new SameUserFriendshipException("You cannot send a friendRequest to yourself!");
         }
@@ -59,6 +60,7 @@ public class FriendsService {
             throw new SameUserFriendshipException("You cannot accept a friendRequest from yourself!");
         }
         List<Friends> friendship = friendsRepository.findByUsers(user1, user2);
+        System.out.println(friendship.size());
         friendship.get(0).setStatus(FriendshipStatus.ACCEPTED);
         friendship.get(1).setStatus(FriendshipStatus.ACCEPTED);
     }
@@ -75,8 +77,7 @@ public class FriendsService {
         friendsRepository.delete(friendship.get(1));
     }
 
-    public FriendsListResponse findAllFriends() throws UserNotFoundException {
-
+    public FriendsListsByStatusResponse findAllFriends() throws UserNotFoundException {
         User user = getUserFromOptional(userRepository.findByEmail(getEmail()));
         List<FriendResponse> friendsList = friendsRepository.findByUser1(user).stream().map(val -> {
             FriendResponse friendResponse = new FriendResponse();
@@ -84,11 +85,24 @@ public class FriendsService {
             friendResponse.setStatus(val.getStatus());
             return friendResponse;
         }).toList();
-        FriendsListResponse friendsListResponse = new FriendsListResponse();
-        friendsListResponse.setAccepted(friendsList.stream().filter(val -> val.getStatus() == FriendshipStatus.ACCEPTED).toList());
-        friendsListResponse.setSent(friendsList.stream().filter(val -> val.getStatus() == FriendshipStatus.SENT).toList());
-        friendsListResponse.setPending(friendsList.stream().filter(val -> val.getStatus() == FriendshipStatus.PENDING).toList());
+        FriendsListsByStatusResponse friendsListsByStatusResponse = new FriendsListsByStatusResponse();
+        friendsListsByStatusResponse.setAccepted(friendsList.stream().filter(val -> val.getStatus() == FriendshipStatus.ACCEPTED).toList());
+        friendsListsByStatusResponse.setSent(friendsList.stream().filter(val -> val.getStatus() == FriendshipStatus.SENT).toList());
+        friendsListsByStatusResponse.setPending(friendsList.stream().filter(val -> val.getStatus() == FriendshipStatus.PENDING).toList());
 
+        return friendsListsByStatusResponse;
+    }
+
+    public FriendsListResponse getFriendsByStatus(FriendshipStatus status) throws UserNotFoundException {
+        User user = getUserFromOptional(userRepository.findByEmail(getEmail()));
+        FriendsListResponse friendsListResponse = new FriendsListResponse();
+        friendsListResponse.setFriends(
+                friendsRepository.findByUser1AndStatus(user, status)
+                        .stream().map(val ->
+                                new FriendResponse(val.getUser2().getId(),
+                                        val.getUser2().getEmail(), val.getUser2().getUname(), val.getStatus(), val.getUser2().getAccount())
+                        )
+                        .toList());
         return friendsListResponse;
     }
 
