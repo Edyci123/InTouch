@@ -37,16 +37,21 @@ import { api } from "./services/api/API";
 setupIonicReact();
 
 const App: React.FC = () => {
-    const [token, isLoggedIn] = useAuth((state) => [
+    const [token, isLoggedIn, logout] = useAuth((state) => [
         state.token,
         state.isLoggedIn,
+        state.logout,
     ]);
     const [setUser] = useGlobal((state) => [state.setUser]);
 
     useEffect(() => {
         if (isLoggedIn && token) {
             api.setToken(token);
-            api.auth.me().then((response) => setUser(response));
+            try {
+                api.auth.me().then((response) => setUser(response));
+            } catch (e) {
+                logout();
+            }
         }
     }, [isLoggedIn]);
 
