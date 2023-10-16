@@ -80,16 +80,16 @@ public class FriendsService {
         friendsRepository.delete(friendship.get(1));
     }
 
-    public Map<String, Object> getFriends(FriendshipStatus status, String email, int page, int size) throws UserNotFoundException {
+    public Map<String, Object> getFriends(FriendshipStatus status, String username, int page, int size) throws UserNotFoundException {
         User user = getUserFromOptional(userRepository.findByEmail(getEmail()));
         List<FriendResponse> friendsList = new ArrayList<>();
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Friends> friendsPage;
-        if (email == null) {
+        if (username == null) {
             friendsPage = friendsRepository.findAllByUser1(user, pageable);
         } else {
-            friendsPage = friendsRepository.findByUser1AndStatusAndUser2_EmailContaining(user, status, email, pageable);
+            friendsPage = friendsRepository.findByUser1AndStatusAndUser2_UnameContaining(user, status, username, pageable);
         }
 
         friendsList = friendsPage.getContent().stream()

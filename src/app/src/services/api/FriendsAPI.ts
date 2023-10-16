@@ -3,7 +3,7 @@ import { APIRoutes } from "./APIRoutes";
 import { BaseAPI } from "./BaseAPI";
 
 export interface ISearchFriends {
-    email?: string;
+    username?: string;
     status: string;
     page: number;
     size: number;

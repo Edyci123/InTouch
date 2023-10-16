@@ -24,7 +24,7 @@ public interface FriendsRepository extends JpaRepository<Friends, Integer> {
 
     Page<Friends> findAllByUser1(User user1, Pageable pageable);
 
-    Page<Friends> findByUser1AndStatusAndUser2_EmailContaining(User user1, FriendshipStatus status, String email, Pageable pageable);
+    Page<Friends> findByUser1AndStatusAndUser2_UnameContaining(User user1, FriendshipStatus status, String email, Pageable pageable);
 
 //    private final EntityManager entityManager;
 //

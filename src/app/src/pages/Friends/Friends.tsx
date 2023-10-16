@@ -30,7 +30,7 @@ export const Friends: React.FC = () => {
     const [friendsRes, setFriendsRes] = useState<ISearchResult>();
     const [currentPage, setCurrentPage] = useState(0);
     const [searchParams, setSearchParams] = useState<ISearchFriends>({
-        email: "",
+        username: "",
         status: FriendshipStatus.accepted,
         page: 0,
         size: 6,
@@ -97,17 +97,17 @@ export const Friends: React.FC = () => {
                             debounce={500}
                             placeholder="Search for friends"
                             mode="ios"
-                            value={searchParams.email}
+                            value={searchParams.username}
                             onIonInput={(e) => {
                                 if (e.detail.value) {
                                     setSearchParams({
                                         ...searchParams,
-                                        email: e.detail.value,
+                                        username: e.detail.value,
                                     });
                                 } else {
                                     setSearchParams({
                                         ...searchParams,
-                                        email: "",
+                                        username: "",
                                     });
                                 }
                                 console.log(e.detail.value);
