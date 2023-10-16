@@ -71,16 +71,18 @@ export const Friends: React.FC = () => {
     };
 
     const fetchOnScroll = (e: any) => {
-        if (currentPage === friendsRes?.totalPages) {
+        if (currentPage + 1 === friendsRes?.totalPages) {
             e.target.complete();
-            return ;
+            return;
         }
         if (friendsRes) {
             setCurrentPage(currentPage + 1);
-            api.friends.getFriendsByStatus({...searchParams, page: currentPage}).then((res) => {
-                setFriends(res.friends.concat(friendsRes?.friends));
-                e.target.complete();
-            });
+            api.friends
+                .getFriendsByStatus({ ...searchParams, page: currentPage })
+                .then((res) => {
+                    setFriends(res.friends.concat(friendsRes?.friends));
+                    e.target.complete();
+                });
         }
     };
 
