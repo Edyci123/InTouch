@@ -22,9 +22,15 @@ public class FriendsController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getFriendsOfUser() {
+    public ResponseEntity<?> getFriendsOfUser(
+            @RequestParam(required = false) String email,
+            @RequestParam String status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(friendsService.findAllFriends());
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(friendsService.getFriends(FriendshipStatus.valueOfLabel(status), email, page, size));
         } catch (UserNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }

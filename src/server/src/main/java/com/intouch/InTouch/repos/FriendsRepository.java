@@ -3,6 +3,8 @@ package com.intouch.InTouch.repos;
 import com.intouch.InTouch.entity.Friends;
 import com.intouch.InTouch.entity.User;
 import com.intouch.InTouch.utils.enums.FriendshipStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,8 +17,12 @@ public interface FriendsRepository extends JpaRepository<Friends, Integer> {
 
     @Query("SELECT f FROM Friends f WHERE (f.user1=:u1 and f.user2=:u2) or (f.user1=:u2 and f.user2=:u1)")
     List<Friends> findByUsers(@Param("u1") User user1, @Param("u2") User user2);
+
     List<Friends> findByUser1(User user1);
+
     List<Friends> findByUser1AndStatus(User user1, FriendshipStatus status);
+
+    Page<Friends> findByUser1AndStatusAndUser2_EmailContaining(User user1, FriendshipStatus status, String email, Pageable pageable);
 
 //    private final EntityManager entityManager;
 //

@@ -12,12 +12,14 @@ import com.intouch.InTouch.utils.pojos.friends.FriendsListResponse;
 import com.intouch.InTouch.utils.pojos.friends.FriendsListsByStatusResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class FriendsService {
@@ -76,6 +78,34 @@ public class FriendsService {
         List<Friends> friendship = friendsRepository.findByUsers(user1, user2);
         friendsRepository.delete(friendship.get(0));
         friendsRepository.delete(friendship.get(1));
+    }
+
+    public Map<String, Object> getFriends(FriendshipStatus status, String email, int page, int size) throws UserNotFoundException {
+        User user = getUserFromOptional(userRepository.findByEmail(getEmail()));
+        List<FriendResponse> friendsList = new ArrayList<>();
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Friends> friendsPage;
+        if (email == null) {
+            friendsPage = friendsRepository.findAll(pageable);
+        } else {
+            friendsPage = friendsRepository.findByUser1AndStatusAndUser2_EmailContaining(user, status, email, pageable);
+        }
+
+        friendsList = friendsPage.getContent().stream()
+                .map(val -> new FriendResponse(val.getUser2().getId(),
+                        val.getUser2().getEmail(), val.getUser2().getUname(), val.getStatus(), val.getUser2().getAccount())
+                )
+                .toList();
+
+        Map<String, Object> res = new HashMap<>();
+
+        res.put("friends", friendsList);
+        res.put("currentPage", friendsPage.getNumber());
+        res.put("totalPages", friendsPage.getTotalPages());
+        res.put("totalItems", friendsPage.getTotalElements());
+
+        return res;
     }
 
     public FriendsListsByStatusResponse findAllFriends() throws UserNotFoundException {
