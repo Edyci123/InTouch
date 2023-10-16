@@ -4,6 +4,10 @@ import {
     IonFabButton,
     IonGrid,
     IonIcon,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    IonItem,
+    IonList,
     IonRow,
     IonSearchbar,
     IonSegment,
@@ -20,10 +24,17 @@ import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import { api } from "../../services/api/API";
 import { FriendshipStatus, IFriends } from "../../services/models/IFriends";
 
+interface SearchParams {
+    search: string;
+    page: 0;
+    size: 6;
+}
+
 export const Friends: React.FC = () => {
     const [showQRModal, setShowQRModal] = useState(false);
     const [status, setStatus] = useState(FriendshipStatus.accepted);
     const [friends, setFriends] = useState<IFriends[]>([]);
+    const [searchParams, setSearchParams] = useState<SearchParams | null>(null);
 
     const scanQRCode = async () => {
         await Camera.requestPermissions();
@@ -32,11 +43,7 @@ export const Friends: React.FC = () => {
         setStatus(FriendshipStatus.accepted);
     };
 
-    useEffect(() => {
-        api.friends
-            .getFriendsByStatus(status)
-            .then((res) => setFriends(res.friends));
-    }, [setFriends, status]);
+    useEffect(() => {}, [setFriends, status]);
 
     const getEmptyArrayMessage = () => {
         switch (status) {
@@ -91,10 +98,10 @@ export const Friends: React.FC = () => {
                                 </IonSegmentButton>
                             </IonSegment>
                         </div>
-                        <IonGrid className="no-padding-grid">
-                            <IonRow>
-                                {friends.length !== 0 ? (
-                                    friends.map((friend, index) => (
+                        <IonList lines="none" className="no-padding-grid">
+                            {friends.length !== 0 ? (
+                                friends.map((friend, index) => (
+                                    <IonItem>
                                         <IonCol key={index} size="12">
                                             <FriendCard
                                                 friend={friend}
@@ -133,16 +140,38 @@ export const Friends: React.FC = () => {
                                                 }}
                                             />
                                         </IonCol>
-                                    ))
-                                ) : (
+                                    </IonItem>
+                                ))
+                            ) : (
+                                <IonItem>
                                     <IonCol className="ion-text-center">
                                         <IonText>
                                             {getEmptyArrayMessage()}
                                         </IonText>
                                     </IonCol>
-                                )}
-                            </IonRow>
-                        </IonGrid>
+                                </IonItem>
+                            )}
+                        </IonList>
+                        <IonInfiniteScroll
+                            threshold="100px"
+                            onIonInfinite={(e) => {
+                                setTimeout(() => {
+                                    api.friends
+                                        .getFriendsByStatus(status)
+                                        .then((res) => {
+                                            setFriends(
+                                                res.friends.concat(friends)
+                                            );
+                                            e.target.complete();
+                                        });
+                                }, 500);
+                            }}
+                        >
+                            <IonInfiniteScrollContent
+                                loadingSpinner="bubbles"
+                                loadingText="Loading more data..."
+                            ></IonInfiniteScrollContent>
+                        </IonInfiniteScroll>
                         <IonFab slot="fixed" vertical="bottom" horizontal="end">
                             <IonFabButton onClick={() => scanQRCode()}>
                                 <IonIcon icon={add} />

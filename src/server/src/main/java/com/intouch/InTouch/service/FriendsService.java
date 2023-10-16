@@ -42,6 +42,7 @@ public class FriendsService {
 
     @Transactional
     public void createFriendship(String email) throws UserNotFoundException, SameUserFriendshipException {
+        System.out.println(email);
         User user1 = getUserFromOptional(userRepository.findByEmail(getEmail()));
         User user2 = getUserFromOptional(userRepository.findByEmail(email));
         if (user1.equals(user2)) {

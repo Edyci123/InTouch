@@ -49,7 +49,10 @@ export const BasePage: React.FC<Props> = ({
                 </IonHeader>
             )}
             {content && (
-                <IonContent className={classNames("ion-padding")}>
+                <IonContent
+                    scrollY={scrollable}
+                    className={classNames("ion-padding")}
+                >
                     <div
                         className={classNames({
                             centered: centeredContent,

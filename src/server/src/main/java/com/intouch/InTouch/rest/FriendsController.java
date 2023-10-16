@@ -4,6 +4,7 @@ import com.intouch.InTouch.service.FriendsService;
 import com.intouch.InTouch.utils.enums.FriendshipStatus;
 import com.intouch.InTouch.utils.exceptions.SameUserFriendshipException;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
+import com.intouch.InTouch.utils.pojos.friends.SendFriendRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,9 +64,9 @@ public class FriendsController {
     }
 
     @PostMapping("/send")
-    public ResponseEntity<?> sendFriendRequest(@RequestBody String email) {
+    public ResponseEntity<?> sendFriendRequest(@RequestBody SendFriendRequest friendRequest) {
         try {
-            friendsService.createFriendship(email);
+            friendsService.createFriendship(friendRequest.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (UserNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
