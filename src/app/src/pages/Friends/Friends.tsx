@@ -94,8 +94,24 @@ export const Friends: React.FC = () => {
                     <>
                         <IonSearchbar
                             animated
+                            debounce={500}
                             placeholder="Search for friends"
                             mode="ios"
+                            value={searchParams.email}
+                            onIonInput={(e) => {
+                                if (e.detail.value) {
+                                    setSearchParams({
+                                        ...searchParams,
+                                        email: e.detail.value,
+                                    });
+                                } else {
+                                    setSearchParams({
+                                        ...searchParams,
+                                        email: "",
+                                    });
+                                }
+                                console.log(e.detail.value);
+                            }}
                         />
                         <div className="ion-padding ion-margin-start ion-margin-end">
                             <IonSegment value={searchParams.status}>
