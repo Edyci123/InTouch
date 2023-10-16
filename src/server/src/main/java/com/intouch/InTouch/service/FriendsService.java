@@ -87,7 +87,7 @@ public class FriendsService {
 
         Page<Friends> friendsPage;
         if (email == null) {
-            friendsPage = friendsRepository.findAll(pageable);
+            friendsPage = friendsRepository.findAllByUser1(user, pageable);
         } else {
             friendsPage = friendsRepository.findByUser1AndStatusAndUser2_EmailContaining(user, status, email, pageable);
         }

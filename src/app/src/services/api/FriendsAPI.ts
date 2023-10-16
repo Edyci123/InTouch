@@ -2,10 +2,25 @@ import { IFriends } from "../models/IFriends";
 import { APIRoutes } from "./APIRoutes";
 import { BaseAPI } from "./BaseAPI";
 
+export interface ISearchFriends {
+    email?: string;
+    status: string;
+    page: number;
+    size: number;
+}
+
+export interface ISearchResult {
+    friends: IFriends[],
+    totalItems: number,
+    totalPages: number,
+    currentPage: number,
+}
+
 export class FriendsAPI extends BaseAPI {
-    async getFriendsByStatus(status: string) {
-        const response = await this.GET<{ friends: IFriends[] }>(
-            this.url(APIRoutes.friends.getByStatus, { status })
+    async getFriendsByStatus(params: ISearchFriends) {
+        const response = await this.GET<ISearchResult>(
+            this.url(APIRoutes.friends.getFriends),
+            { params }
         );
         return response.data;
     }

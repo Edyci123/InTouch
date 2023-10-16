@@ -23,18 +23,22 @@ import { Camera } from "@capacitor/camera";
 import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import { api } from "../../services/api/API";
 import { FriendshipStatus, IFriends } from "../../services/models/IFriends";
-
-interface SearchParams {
-    search: string;
-    page: 0;
-    size: 6;
-}
+import { ISearchFriends, ISearchResult } from "../../services/api/FriendsAPI";
 
 export const Friends: React.FC = () => {
     const [showQRModal, setShowQRModal] = useState(false);
-    const [status, setStatus] = useState(FriendshipStatus.accepted);
-    const [friends, setFriends] = useState<IFriends[]>([]);
-    const [searchParams, setSearchParams] = useState<SearchParams | null>(null);
+    const [friendsRes, setFriendsRes] = useState<ISearchResult>();
+    const [currentPage, setCurrentPage] = useState(0);
+    const [searchParams, setSearchParams] = useState<ISearchFriends>({
+        email: "",
+        status: FriendshipStatus.accepted,
+        page: 0,
+        size: 6,
+    });
+
+    const setStatus = (status: FriendshipStatus) => {
+        setSearchParams({ ...searchParams, status });
+    };
 
     const scanQRCode = async () => {
         await Camera.requestPermissions();
@@ -44,19 +48,39 @@ export const Friends: React.FC = () => {
     };
 
     useEffect(() => {
-        api.friends.getFriendsByStatus(status).then((res) => {
-            setFriends(res.friends);
+        api.friends.getFriendsByStatus(searchParams).then((res) => {
+            setFriendsRes(res);
         });
-    }, [setFriends, status]);
+    }, [setFriendsRes, searchParams]);
 
     const getEmptyArrayMessage = () => {
-        switch (status) {
+        switch (searchParams.status) {
             case FriendshipStatus.pending:
                 return "There are no pending friend requests!";
             case FriendshipStatus.accepted:
                 return "You have no friends here:(";
             case FriendshipStatus.sent:
                 return "You have no sent friend requests!";
+        }
+    };
+
+    const setFriends = (friends: IFriends[]) => {
+        if (friendsRes) {
+            setFriendsRes({ ...friendsRes, friends });
+        }
+    };
+
+    const fetchOnScroll = (e: any) => {
+        if (currentPage === friendsRes?.totalPages) {
+            e.target.complete();
+            return ;
+        }
+        if (friendsRes) {
+            setCurrentPage(currentPage + 1);
+            api.friends.getFriendsByStatus({...searchParams, page: currentPage}).then((res) => {
+                setFriends(res.friends.concat(friendsRes?.friends));
+                e.target.complete();
+            });
         }
     };
 
@@ -72,7 +96,7 @@ export const Friends: React.FC = () => {
                             mode="ios"
                         />
                         <div className="ion-padding ion-margin-start ion-margin-end">
-                            <IonSegment value={status}>
+                            <IonSegment value={searchParams.status}>
                                 <IonSegmentButton
                                     value={FriendshipStatus.accepted}
                                     onClick={() =>
@@ -100,8 +124,8 @@ export const Friends: React.FC = () => {
                             </IonSegment>
                         </div>
                         <IonGrid className="no-padding-grid">
-                            {friends.length !== 0 ? (
-                                friends.map((friend, index) => (
+                            {friendsRes?.friends.length !== 0 ? (
+                                friendsRes?.friends.map((friend, index) => (
                                     <IonRow key={index}>
                                         <IonCol size="12">
                                             <FriendCard
@@ -111,7 +135,7 @@ export const Friends: React.FC = () => {
                                                         friend.id
                                                     );
                                                     setFriends(
-                                                        friends.filter(
+                                                        friendsRes.friends.filter(
                                                             (val) =>
                                                                 val !== friend
                                                         )
@@ -122,7 +146,7 @@ export const Friends: React.FC = () => {
                                                         friend.id
                                                     );
                                                     setFriends(
-                                                        friends.filter(
+                                                        friendsRes.friends.filter(
                                                             (val) =>
                                                                 val !== friend
                                                         )
@@ -133,7 +157,7 @@ export const Friends: React.FC = () => {
                                                         friend.id
                                                     );
                                                     setFriends(
-                                                        friends.filter(
+                                                        friendsRes.friends.filter(
                                                             (val) =>
                                                                 val !== friend
                                                         )
@@ -157,14 +181,7 @@ export const Friends: React.FC = () => {
                             threshold="100px"
                             onIonInfinite={(e) => {
                                 setTimeout(() => {
-                                    api.friends
-                                        .getFriendsByStatus(status)
-                                        .then((res) => {
-                                            setFriends(
-                                                res.friends.concat(friends)
-                                            );
-                                            e.target.complete();
-                                        });
+                                    fetchOnScroll(e);
                                 }, 500);
                             }}
                         >
