@@ -10,7 +10,7 @@ export type IAccount = z.infer<typeof zAccount>;
 
 export const zAccountSettings = z.object({
     username: z.string(),
-    account: zAccount,
+    accounts: zAccount,
 });
 
 export type IAccountSettings = z.infer<typeof zAccountSettings>;
