@@ -43,7 +43,11 @@ export const Friends: React.FC = () => {
         setStatus(FriendshipStatus.accepted);
     };
 
-    useEffect(() => {}, [setFriends, status]);
+    useEffect(() => {
+        api.friends.getFriendsByStatus(status).then((res) => {
+            setFriends(res.friends);
+        });
+    }, [setFriends, status]);
 
     const getEmptyArrayMessage = () => {
         switch (status) {
@@ -68,10 +72,7 @@ export const Friends: React.FC = () => {
                             mode="ios"
                         />
                         <div className="ion-padding ion-margin-start ion-margin-end">
-                            <IonSegment
-                                value={status}
-                                onChange={(e) => console.log(e)}
-                            >
+                            <IonSegment value={status}>
                                 <IonSegmentButton
                                     value={FriendshipStatus.accepted}
                                     onClick={() =>
@@ -98,11 +99,11 @@ export const Friends: React.FC = () => {
                                 </IonSegmentButton>
                             </IonSegment>
                         </div>
-                        <IonList lines="none" className="no-padding-grid">
+                        <IonGrid className="no-padding-grid">
                             {friends.length !== 0 ? (
                                 friends.map((friend, index) => (
-                                    <IonItem>
-                                        <IonCol key={index} size="12">
+                                    <IonRow key={index}>
+                                        <IonCol size="12">
                                             <FriendCard
                                                 friend={friend}
                                                 handleAcceptFriendRequest={async () => {
@@ -140,18 +141,18 @@ export const Friends: React.FC = () => {
                                                 }}
                                             />
                                         </IonCol>
-                                    </IonItem>
+                                    </IonRow>
                                 ))
                             ) : (
-                                <IonItem>
+                                <IonRow>
                                     <IonCol className="ion-text-center">
                                         <IonText>
                                             {getEmptyArrayMessage()}
                                         </IonText>
                                     </IonCol>
-                                </IonItem>
+                                </IonRow>
                             )}
-                        </IonList>
+                        </IonGrid>
                         <IonInfiniteScroll
                             threshold="100px"
                             onIonInfinite={(e) => {
@@ -172,16 +173,16 @@ export const Friends: React.FC = () => {
                                 loadingText="Loading more data..."
                             ></IonInfiniteScrollContent>
                         </IonInfiniteScroll>
+                    </>
+                }
+                customContent={
+                    <>
                         <IonFab slot="fixed" vertical="bottom" horizontal="end">
                             <IonFabButton onClick={() => scanQRCode()}>
                                 <IonIcon icon={add} />
                             </IonFabButton>
                         </IonFab>
-                        <IonFab
-                            slot="fixed"
-                            vertical="bottom"
-                            horizontal="start"
-                        >
+                        <IonFab vertical="bottom" horizontal="start">
                             <IonFabButton onClick={() => setShowQRModal(true)}>
                                 <IonIcon icon={qrCode} />
                             </IonFabButton>
