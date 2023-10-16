@@ -4,6 +4,7 @@ import com.intouch.InTouch.service.FriendsService;
 import com.intouch.InTouch.utils.enums.FriendshipStatus;
 import com.intouch.InTouch.utils.exceptions.SameUserFriendshipException;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
+import com.intouch.InTouch.utils.pojos.friends.SendFriendRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,16 @@ public class FriendsController {
         this.friendsService = friendsService;
     }
 
-    @GetMapping
-    public ResponseEntity<?> getFriendsOfUser() {
+    @GetMapping("/")
+    public ResponseEntity<?> getFriendsOfUser(
+            @RequestParam(required = false) String username,
+            @RequestParam String status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(friendsService.findAllFriends());
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(friendsService.getFriends(FriendshipStatus.valueOfLabel(status), username, page, size));
         } catch (UserNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
@@ -63,9 +70,9 @@ public class FriendsController {
     }
 
     @PostMapping("/send")
-    public ResponseEntity<?> sendFriendRequest(@RequestBody String email) {
+    public ResponseEntity<?> sendFriendRequest(@RequestBody SendFriendRequest friendRequest) {
         try {
-            friendsService.createFriendship(email);
+            friendsService.createFriendship(friendRequest.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (UserNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());

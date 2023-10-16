@@ -1,27 +1,23 @@
-import React, { useId, useState } from "react";
-import { BasePage } from "../../components/BasePage/BasePage";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
     IonButton,
     IonCol,
-    IonFooter,
     IonGrid,
     IonInput,
     IonLoading,
     IonRouterLink,
     IonRow,
-    IonText,
-    IonTitle,
+    IonText
 } from "@ionic/react";
+import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ILogin, zLogin } from "../../services/models/IAuth";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Redirect, useHistory } from "react-router";
 import Routes from "../../Routes";
-import styles from "./auth.module.scss";
+import { BasePage } from "../../components/BasePage/BasePage";
 import { api } from "../../services/api/API";
-import { Redirect, Route, useHistory } from "react-router";
-import { ErrorMessage } from "@hookform/error-message";
+import { ILogin, zLogin } from "../../services/models/IAuth";
 import { useAuth } from "../../services/storage/auth.store";
-import { APIRoutes } from "../../services/api/APIRoutes";
+import styles from "./auth.module.scss";
 
 export const Login: React.FC = () => {
     const history = useHistory();
@@ -63,6 +59,7 @@ export const Login: React.FC = () => {
             menu={false}
             noHeader={true}
             title="Login"
+            scrollable={false}
             content={
                 <form id="login-form" onSubmit={form.handleSubmit(onSubmit)}>
                     <IonGrid className="ion-padding">

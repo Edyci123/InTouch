@@ -22,14 +22,14 @@ import { useGlobal } from "../../services/storage/global.store";
 import { api } from "../../services/api/API";
 
 export const Settings: React.FC = () => {
-    const [user] = useGlobal((state) => [state.user]);
+    const [user, setUser] = useGlobal((state) => [state.user, state.setUser]);
 
     console.log(user);
 
     const form = useForm<IAccountSettings>({
         mode: "all",
         values: user
-            ? { username: user.username, account: user.account }
+            ? { username: user.username, accounts: user.accounts }
             : undefined,
         resolver: zodResolver(zAccountSettings),
     });
@@ -37,6 +37,9 @@ export const Settings: React.FC = () => {
     const onSubmit: SubmitHandler<IAccountSettings> = async (data) => {
         try {
             const response = await api.auth.updateAccounts(data);
+            if (user) {
+                setUser({email: user.email, ...data });
+            }
             console.log(response.status);
         } catch (error) {
             console.log("Update me error:", error);
@@ -81,7 +84,7 @@ export const Settings: React.FC = () => {
                                 </IonLabel>
                                 <IonInput
                                     {...form.register(
-                                        "account.facebookUsername"
+                                        "accounts.facebookUsername"
                                     )}
                                     fill="outline"
                                     mode="md"
@@ -94,7 +97,7 @@ export const Settings: React.FC = () => {
                                 </IonLabel>
                                 <IonInput
                                     {...form.register(
-                                        "account.instagramUsername"
+                                        "accounts.instagramUsername"
                                     )}
                                     fill="outline"
                                     mode="md"
@@ -107,7 +110,7 @@ export const Settings: React.FC = () => {
                                 </IonLabel>
                                 <IonInput
                                     {...form.register(
-                                        "account.snapchatUsername"
+                                        "accounts.snapchatUsername"
                                     )}
                                     fill="outline"
                                     mode="md"

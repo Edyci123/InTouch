@@ -20,7 +20,11 @@ ion-app {
 }
 
 .no-scroll {
-    overflow: hidden;
+    overflow: hidden !important;
+}
+
+.position-bottom {
+    position: fixed;
 }
 
 .grid-input {
