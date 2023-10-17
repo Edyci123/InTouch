@@ -39,7 +39,7 @@ export const Settings: React.FC = () => {
     });
 
     const onSubmit: SubmitHandler<IAccountSettings> = async (data) => {
-        setIsLoading(true)
+        setIsLoading(true);
         try {
             const response = await api.auth.updateAccounts(data);
             if (user) {

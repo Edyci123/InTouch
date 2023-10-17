@@ -13,5 +13,5 @@ import lombok.Setter;
 public class UserResponse {
     private String email;
     private String username;
-    private Account account;
+    private Account accounts;
 }
