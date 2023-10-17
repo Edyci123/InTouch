@@ -28,6 +28,7 @@ import { ISearchFriends, ISearchResult } from "../../services/api/FriendsAPI";
 
 export const Friends: React.FC = () => {
     const [present] = useIonToast();
+    const [isLoading, setIsLoading] = useState(false);
 
     const [showQRModal, setShowQRModal] = useState(false);
     const [friendsRes, setFriendsRes] = useState<ISearchResult>();
@@ -51,9 +52,16 @@ export const Friends: React.FC = () => {
     };
 
     useEffect(() => {
-        api.friends.getFriendsByStatus(searchParams).then((res) => {
-            setFriendsRes(res);
-        });
+        setIsLoading(true);
+        try {
+            api.friends.getFriendsByStatus(searchParams).then((res) => {
+                setFriendsRes(res);
+            });
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setIsLoading(false);
+        }
     }, [setFriendsRes, searchParams]);
 
     const getEmptyArrayMessage = () => {
@@ -85,12 +93,16 @@ export const Friends: React.FC = () => {
         }
         if (friendsRes) {
             setCurrentPage(currentPage + 1);
-            api.friends
-                .getFriendsByStatus({ ...searchParams, page: currentPage })
-                .then((res) => {
-                    setFriends(res.friends.concat(friendsRes?.friends));
-                    e.target.complete();
-                });
+            try {
+                api.friends
+                    .getFriendsByStatus({ ...searchParams, page: currentPage })
+                    .then((res) => {
+                        setFriends(res.friends.concat(friendsRes?.friends));
+                        e.target.complete();
+                    });
+            } catch (e) {
+                console.log(e);
+            }
         }
     };
 
