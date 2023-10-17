@@ -8,6 +8,7 @@ import {
     IonRouterLink,
     IonRow,
     IonText,
+    useIonToast,
 } from "@ionic/react";
 import Routes from "../../Routes";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -20,6 +21,7 @@ import { useAuth } from "../../services/storage/auth.store";
 
 export const Register: React.FC = () => {
     const history = useHistory();
+    const [present] = useIonToast();
 
     const form = useForm<IRegister>({
         mode: "all",
@@ -33,6 +35,12 @@ export const Register: React.FC = () => {
     const onSubmit: SubmitHandler<IRegister> = async (data) => {
         try {
             const response = await api.auth.register(data);
+            present({
+                message: "You've created a new account successfully!",
+                duration: 1000,
+                position: "bottom",
+                color: "success"
+            })
             history.push("/auth/login");
         } catch (e) {
             console.log("eroare:", e);

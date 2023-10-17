@@ -13,6 +13,7 @@ import {
     IonSegment,
     IonSegmentButton,
     IonText,
+    useIonToast,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { BasePage } from "../../components/BasePage/BasePage";
@@ -26,6 +27,8 @@ import { FriendshipStatus, IFriends } from "../../services/models/IFriends";
 import { ISearchFriends, ISearchResult } from "../../services/api/FriendsAPI";
 
 export const Friends: React.FC = () => {
+    const [present] = useIonToast();
+
     const [showQRModal, setShowQRModal] = useState(false);
     const [friendsRes, setFriendsRes] = useState<ISearchResult>();
     const [currentPage, setCurrentPage] = useState(0);
@@ -73,6 +76,11 @@ export const Friends: React.FC = () => {
     const fetchOnScroll = (e: any) => {
         if (currentPage + 1 === friendsRes?.totalPages) {
             e.target.complete();
+            present({
+                duration: 1000,
+                message: "No more friends to retrieve!",
+                position: "bottom",
+            });
             return;
         }
         if (friendsRes) {
@@ -152,6 +160,12 @@ export const Friends: React.FC = () => {
                                                     await api.friends.acceptFriendRequest(
                                                         friend.id
                                                     );
+                                                    present({
+                                                        duration: 1000,
+                                                        message: `You've just accepted,${friend.username}'s friend request!`,
+                                                        color: "success",
+                                                        position: "bottom",
+                                                    });
                                                     setFriends(
                                                         friendsRes.friends.filter(
                                                             (val) =>
@@ -163,6 +177,12 @@ export const Friends: React.FC = () => {
                                                     await api.friends.deleteFriendship(
                                                         friend.id
                                                     );
+                                                    present({
+                                                        duration: 1000,
+                                                        message: `You've just rejected,${friend.username}'s friend request!`,
+                                                        color: "warning",
+                                                        position: "bottom",
+                                                    });
                                                     setFriends(
                                                         friendsRes.friends.filter(
                                                             (val) =>
@@ -174,6 +194,12 @@ export const Friends: React.FC = () => {
                                                     await api.friends.deleteFriendship(
                                                         friend.id
                                                     );
+                                                    present({
+                                                        duration: 1000,
+                                                        message: `You've just deleted, a friend request!`,
+                                                        color: "warning",
+                                                        position: "bottom",
+                                                    });
                                                     setFriends(
                                                         friendsRes.friends.filter(
                                                             (val) =>

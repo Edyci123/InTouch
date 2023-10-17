@@ -11,6 +11,7 @@ import {
     IonRouterLink,
     IonRow,
     IonText,
+    useIonToast,
 } from "@ionic/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
@@ -23,6 +24,7 @@ import { api } from "../../services/api/API";
 
 export const Settings: React.FC = () => {
     const [user, setUser] = useGlobal((state) => [state.user, state.setUser]);
+    const [present] = useIonToast();
 
     console.log(user);
 
@@ -38,8 +40,14 @@ export const Settings: React.FC = () => {
         try {
             const response = await api.auth.updateAccounts(data);
             if (user) {
-                setUser({email: user.email, ...data });
+                setUser({ email: user.email, ...data });
             }
+            present({
+                message: "Account updated!",
+                duration: 1000,
+                position: "bottom",
+                color: "success",
+            });
             console.log(response.status);
         } catch (error) {
             console.log("Update me error:", error);
