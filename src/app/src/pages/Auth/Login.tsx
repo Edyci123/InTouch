@@ -7,7 +7,8 @@ import {
     IonLoading,
     IonRouterLink,
     IonRow,
-    IonText
+    IonText,
+    useIonToast
 } from "@ionic/react";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -22,6 +23,7 @@ import styles from "./auth.module.scss";
 export const Login: React.FC = () => {
     const history = useHistory();
     const [loading, setLoading] = useState(false);
+    const [present] = useIonToast();
 
     const form = useForm<ILogin>({
         mode: "all",
@@ -38,6 +40,12 @@ export const Login: React.FC = () => {
             const response = await api.auth.login(data);
             api.setToken(response.accessToken);
             login(response.accessToken);
+            present({
+                message: "You've been logged in successfully!",
+                duration: 1000,
+                position: "bottom",
+                color: "success"
+            })
             history.push("/home");
         } catch (e) {
             console.log("error: ", e);

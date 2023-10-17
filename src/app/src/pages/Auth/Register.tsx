@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { BasePage } from "../../components/BasePage/BasePage";
 import {
     IonButton,
     IonCol,
     IonGrid,
     IonInput,
+    IonLoading,
     IonRouterLink,
     IonRow,
     IonText,
+    useIonToast,
 } from "@ionic/react";
 import Routes from "../../Routes";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -20,6 +22,8 @@ import { useAuth } from "../../services/storage/auth.store";
 
 export const Register: React.FC = () => {
     const history = useHistory();
+    const [present] = useIonToast();
+    const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<IRegister>({
         mode: "all",
@@ -31,11 +35,20 @@ export const Register: React.FC = () => {
     console.log(form.formState.errors);
 
     const onSubmit: SubmitHandler<IRegister> = async (data) => {
+        setIsLoading(true);
         try {
             const response = await api.auth.register(data);
+            present({
+                message: "You've created a new account successfully!",
+                duration: 1000,
+                position: "bottom",
+                color: "success",
+            });
             history.push("/auth/login");
         } catch (e) {
             console.log("eroare:", e);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -131,6 +144,7 @@ export const Register: React.FC = () => {
                             </IonCol>
                         </IonRow>
                     </IonGrid>
+                    <IonLoading isOpen={isLoading} />
                 </form>
             }
             footer={

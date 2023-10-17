@@ -13,6 +13,7 @@ import {
     IonSegment,
     IonSegmentButton,
     IonText,
+    useIonToast,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { BasePage } from "../../components/BasePage/BasePage";
@@ -26,6 +27,9 @@ import { FriendshipStatus, IFriends } from "../../services/models/IFriends";
 import { ISearchFriends, ISearchResult } from "../../services/api/FriendsAPI";
 
 export const Friends: React.FC = () => {
+    const [present] = useIonToast();
+    const [isLoading, setIsLoading] = useState(false);
+
     const [showQRModal, setShowQRModal] = useState(false);
     const [friendsRes, setFriendsRes] = useState<ISearchResult>();
     const [currentPage, setCurrentPage] = useState(0);
@@ -48,9 +52,16 @@ export const Friends: React.FC = () => {
     };
 
     useEffect(() => {
-        api.friends.getFriendsByStatus(searchParams).then((res) => {
-            setFriendsRes(res);
-        });
+        setIsLoading(true);
+        try {
+            api.friends.getFriendsByStatus(searchParams).then((res) => {
+                setFriendsRes(res);
+            });
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setIsLoading(false);
+        }
     }, [setFriendsRes, searchParams]);
 
     const getEmptyArrayMessage = () => {
@@ -73,16 +84,25 @@ export const Friends: React.FC = () => {
     const fetchOnScroll = (e: any) => {
         if (currentPage + 1 === friendsRes?.totalPages) {
             e.target.complete();
+            present({
+                duration: 1000,
+                message: "No more friends to retrieve!",
+                position: "bottom",
+            });
             return;
         }
         if (friendsRes) {
             setCurrentPage(currentPage + 1);
-            api.friends
-                .getFriendsByStatus({ ...searchParams, page: currentPage })
-                .then((res) => {
-                    setFriends(res.friends.concat(friendsRes?.friends));
-                    e.target.complete();
-                });
+            try {
+                api.friends
+                    .getFriendsByStatus({ ...searchParams, page: currentPage })
+                    .then((res) => {
+                        setFriends(res.friends.concat(friendsRes?.friends));
+                        e.target.complete();
+                    });
+            } catch (e) {
+                console.log(e);
+            }
         }
     };
 
@@ -114,7 +134,7 @@ export const Friends: React.FC = () => {
                             }}
                         />
                         <div className="ion-padding ion-margin-start ion-margin-end">
-                            <IonSegment value={searchParams.status}>
+                            <IonSegment mode="ios" value={searchParams.status}>
                                 <IonSegmentButton
                                     value={FriendshipStatus.accepted}
                                     onClick={() =>
@@ -152,6 +172,12 @@ export const Friends: React.FC = () => {
                                                     await api.friends.acceptFriendRequest(
                                                         friend.id
                                                     );
+                                                    present({
+                                                        duration: 1000,
+                                                        message: `You've just accepted,${friend.username}'s friend request!`,
+                                                        color: "success",
+                                                        position: "bottom",
+                                                    });
                                                     setFriends(
                                                         friendsRes.friends.filter(
                                                             (val) =>
@@ -163,6 +189,12 @@ export const Friends: React.FC = () => {
                                                     await api.friends.deleteFriendship(
                                                         friend.id
                                                     );
+                                                    present({
+                                                        duration: 1000,
+                                                        message: `You've just rejected,${friend.username}'s friend request!`,
+                                                        color: "warning",
+                                                        position: "bottom",
+                                                    });
                                                     setFriends(
                                                         friendsRes.friends.filter(
                                                             (val) =>
@@ -174,6 +206,12 @@ export const Friends: React.FC = () => {
                                                     await api.friends.deleteFriendship(
                                                         friend.id
                                                     );
+                                                    present({
+                                                        duration: 1000,
+                                                        message: `You've just deleted, a friend request!`,
+                                                        color: "warning",
+                                                        position: "bottom",
+                                                    });
                                                     setFriends(
                                                         friendsRes.friends.filter(
                                                             (val) =>

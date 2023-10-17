@@ -8,6 +8,7 @@ import {
     IonMenu,
     IonMenuToggle,
     IonText,
+    useIonToast,
 } from "@ionic/react";
 import { home, logOut, people, scan, settings } from "ionicons/icons";
 import React from "react";
@@ -16,6 +17,7 @@ import { useAuth } from "../../services/storage/auth.store";
 
 export const Menu: React.FC = () => {
     const [logout] = useAuth((state) => [state.logout]);
+    const [present] = useIonToast();
 
     return (
         <IonMenu side="end" contentId="menu-content">
@@ -45,7 +47,15 @@ export const Menu: React.FC = () => {
                         </IonItem>
                         <IonItem
                             button
-                            onClick={() => logout()}
+                            onClick={() => {
+                                logout();
+                                present({
+                                    message: "You've been logged out successfully!",
+                                    duration: 1000,
+                                    position: "bottom",
+                                    color: "success"
+                                })
+                            }}
                             routerLink={Routes.login}
                         >
                             <IonIcon className="ion-margin-end" icon={logOut} />
