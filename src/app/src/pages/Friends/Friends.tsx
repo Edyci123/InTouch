@@ -134,7 +134,7 @@ export const Friends: React.FC = () => {
                             }}
                         />
                         <div className="ion-padding ion-margin-start ion-margin-end">
-                            <IonSegment value={searchParams.status}>
+                            <IonSegment mode="ios" value={searchParams.status}>
                                 <IonSegmentButton
                                     value={FriendshipStatus.accepted}
                                     onClick={() =>
