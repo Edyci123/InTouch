@@ -4,7 +4,7 @@ import com.intouch.InTouch.service.FriendsService;
 import com.intouch.InTouch.utils.enums.FriendshipStatus;
 import com.intouch.InTouch.utils.exceptions.SameUserFriendshipException;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
-import com.intouch.InTouch.utils.pojos.friends.SendFriendRequest;
+import com.intouch.InTouch.utils.dtos.friends.SendFriendRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

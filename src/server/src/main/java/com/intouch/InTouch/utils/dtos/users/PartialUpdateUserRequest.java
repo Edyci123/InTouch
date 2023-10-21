@@ -1,4 +1,4 @@
-package com.intouch.InTouch.utils.pojos.users;
+package com.intouch.InTouch.utils.dtos.users;
 
 
 import com.intouch.InTouch.entity.Account;

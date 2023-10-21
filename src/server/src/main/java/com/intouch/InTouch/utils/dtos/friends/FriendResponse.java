@@ -1,4 +1,4 @@
-package com.intouch.InTouch.utils.pojos.friends;
+package com.intouch.InTouch.utils.dtos.friends;
 
 import com.intouch.InTouch.entity.Account;
 import com.intouch.InTouch.utils.enums.FriendshipStatus;

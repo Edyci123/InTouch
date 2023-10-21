@@ -1,4 +1,4 @@
-package com.intouch.InTouch.utils.pojos.auth;
+package com.intouch.InTouch.utils.dtos.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +12,11 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthRequest {
+public class RegisterRequest {
+
+    @NotNull
+    private String username;
+
     @NotNull
     @Email
     private String email;

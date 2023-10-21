@@ -2,7 +2,7 @@ package com.intouch.InTouch.rest;
 
 import com.intouch.InTouch.service.UserService;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
-import com.intouch.InTouch.utils.pojos.users.PartialUpdateUserRequest;
+import com.intouch.InTouch.utils.dtos.users.PartialUpdateUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

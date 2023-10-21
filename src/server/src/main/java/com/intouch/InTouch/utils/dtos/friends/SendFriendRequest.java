@@ -1,5 +1,4 @@
-package com.intouch.InTouch.utils.pojos.auth;
-
+package com.intouch.InTouch.utils.dtos.friends;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,9 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthResponse {
-
+public class SendFriendRequest {
     private String email;
-
-    private String accessToken;
 }
