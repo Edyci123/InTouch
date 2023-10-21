@@ -6,6 +6,7 @@ import com.intouch.InTouch.utils.FileDownloadUtil;
 import com.intouch.InTouch.utils.FileUploadUtil;
 import com.intouch.InTouch.utils.UserUtils;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +17,9 @@ import java.io.IOException;
 @Service
 public class FilesService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
+    @Autowired
     public FilesService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
