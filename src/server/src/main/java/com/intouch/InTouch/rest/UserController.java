@@ -20,13 +20,10 @@ public class UserController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<?> updateAccount(@RequestBody PartialUpdateUserRequest updateUserRequest) {
-        try {
+    public ResponseEntity<?> updateAccount(@RequestBody PartialUpdateUserRequest updateUserRequest) throws UserNotFoundException {
             userService.partialUpdateUser(updateUserRequest);
             return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (UserNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+
     }
 
     @GetMapping("/users")

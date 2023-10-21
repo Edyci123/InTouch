@@ -2,11 +2,12 @@ package com.intouch.InTouch.service;
 
 import com.intouch.InTouch.entity.User;
 import com.intouch.InTouch.repos.UserRepository;
-import com.intouch.InTouch.utils.exceptions.UserAlreadyExistsException;
-import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
+import com.intouch.InTouch.utils.UserUtils;
 import com.intouch.InTouch.utils.dtos.auth.RegisterRequest;
 import com.intouch.InTouch.utils.dtos.users.PartialUpdateUserRequest;
 import com.intouch.InTouch.utils.dtos.users.UserResponse;
+import com.intouch.InTouch.utils.exceptions.UserAlreadyExistsException;
+import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class UserService {
 
     @Transactional
     public void partialUpdateUser(PartialUpdateUserRequest updateUserRequest) throws UserNotFoundException {
-        User user = getUserFromOptional(userRepository.findByEmail(getEmail()));
+        User user = UserUtils.getUserFromOptional(userRepository.findByEmail(UserUtils.getEmail()));
         user.setAccount(updateUserRequest.getAccounts());
         user.setUname(updateUserRequest.getUsername());
     }
@@ -71,7 +71,7 @@ public class UserService {
 
         userList = pageUsers.getContent().stream()
                 .map(val -> new UserResponse(val.getEmail(), val.getUsername(), val.getAccount()))
-                .filter(val -> !Objects.equals(val.getEmail(), getEmail()))
+                .filter(val -> !Objects.equals(val.getEmail(), UserUtils.getEmail()))
                 .collect(Collectors.toList());
          Map<String, Object> res = new HashMap<>();
          res.put("users", userList);
@@ -83,7 +83,7 @@ public class UserService {
     }
 
     public UserResponse getCurrentUser() throws UserNotFoundException {
-        User user = getUserFromOptional(userRepository.findByEmail(getEmail()));
+        User user = UserUtils.getUserFromOptional(userRepository.findByEmail(UserUtils.getEmail()));
         return new UserResponse(user.getEmail(), user.getUname(), user.getAccount());
     }
 
@@ -91,19 +91,4 @@ public class UserService {
         return passwordEncoder.encode(password);
     }
 
-    private User getUserFromOptional(Optional<User> optUser) throws UserNotFoundException {
-        if (optUser.isPresent()) {
-            return optUser.get();
-        } else {
-            throw new UserNotFoundException("User not found!");
-        }
-    }
-
-    private String getEmail() {
-        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (currentUserEmail.startsWith(" ")) {
-            currentUserEmail = currentUserEmail.substring(1);
-        }
-        return currentUserEmail;
-    }
 }
