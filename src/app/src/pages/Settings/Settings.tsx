@@ -25,6 +25,7 @@ import { useGlobal } from "../../services/storage/global.store";
 import { api } from "../../services/api/API";
 import { camera } from "ionicons/icons";
 import styles from "./settings.module.scss";
+import { Camera, CameraResultType } from "@capacitor/camera";
 
 export const Settings: React.FC = () => {
     const [user, setUser] = useGlobal((state) => [state.user, state.setUser]);
@@ -66,6 +67,16 @@ export const Settings: React.FC = () => {
         }
     };
 
+    const handleCamera = async () => {
+        await Camera.requestPermissions()
+        const image = await Camera.getPhoto({
+            quality: 90,
+            allowEditing: true,
+            resultType: CameraResultType.Base64
+        })
+        console.log(image)
+    }
+
     return (
         <BasePage
             title="Settings"
@@ -87,9 +98,11 @@ export const Settings: React.FC = () => {
                                         />
                                     </div>
                                     <IonIcon
+                                    style={{zIndex: 9999}}
                                         className={styles["change-photo-icon"]}
                                         slot="icon-only"
                                         icon={camera}
+                                        onClick={() => handleCamera()}
                                     />
                                 </div>
                             </IonCol>
