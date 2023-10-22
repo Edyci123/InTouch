@@ -4,6 +4,7 @@ import {
     IonButton,
     IonCol,
     IonGrid,
+    IonIcon,
     IonImg,
     IonInput,
     IonItem,
@@ -22,6 +23,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useGlobal } from "../../services/storage/global.store";
 import { api } from "../../services/api/API";
+import { camera } from "ionicons/icons";
+import styles from "./settings.module.scss"
 
 export const Settings: React.FC = () => {
     const [user, setUser] = useGlobal((state) => [state.user, state.setUser]);
@@ -43,7 +46,7 @@ export const Settings: React.FC = () => {
         try {
             const response = await api.auth.updateAccounts(data);
             if (user) {
-                setUser({ email: user.email, ...data });
+                setUser({ email: user.email, photoUri: user.photoUri, ...data });
             }
             present({
                 message: "Account updated!",
@@ -66,8 +69,18 @@ export const Settings: React.FC = () => {
                 <form id="settings-form" onSubmit={form.handleSubmit(onSubmit)}>
                     <IonGrid className="ion-padding">
                         <IonRow className="mb-4">
-                            <IonCol size="4">
-                                <IonImg src="https://placehold.co/400x400" />
+                            <IonCol className="ion-no-padding" size="4">
+                                <div>
+                                    <img
+                                        className="circle-image"
+                                        src={"http://localhost:8080/api" + user?.photoUri}
+                                    />
+                                    <IonIcon
+                                        className={styles['change-photo-icon']}
+                                        slot="icon-only"
+                                        icon={camera}
+                                    />
+                                </div>
                             </IonCol>
                             <IonCol size="8">
                                 <IonText className="centered fw-700">

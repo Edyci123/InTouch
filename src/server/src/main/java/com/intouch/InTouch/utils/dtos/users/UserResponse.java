@@ -14,4 +14,5 @@ public class UserResponse {
     private String email;
     private String username;
     private Account accounts;
+    private String photoUri;
 }

@@ -17,4 +17,5 @@ public class FriendResponse {
     private String username;
     private FriendshipStatus status;
     private Account accounts;
+    private String photoUri;
 }

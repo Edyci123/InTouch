@@ -29,7 +29,7 @@ public class FilesService {
         User user = UserUtils.getUserFromOptional(userRepository.findByEmail(UserUtils.getEmail()));
         String fileCode = FileUploadUtil.saveFile(fileName, file);
 
-        user.setPhotoUri("/files/downloads/" + fileCode);
+        user.setPhotoUri("/files/download/" + fileCode);
     }
 
     public Resource getFile(String fileCode) throws IOException {

@@ -97,7 +97,8 @@ public class FriendsService {
 
         friendsList = friendsPage.getContent().stream()
                 .map(val -> new FriendResponse(val.getUser2().getId(),
-                        val.getUser2().getEmail(), val.getUser2().getUname(), val.getStatus(), val.getUser2().getAccount())
+                        val.getUser2().getEmail(), val.getUser2().getUname(),
+                        val.getStatus(), val.getUser2().getAccount(), val.getUser2().getPhotoUri())
                 )
                 .toList();
 
@@ -134,7 +135,8 @@ public class FriendsService {
                 friendsRepository.findByUser1AndStatus(user, status)
                         .stream().map(val ->
                                 new FriendResponse(val.getUser2().getId(),
-                                        val.getUser2().getEmail(), val.getUser2().getUname(), val.getStatus(), val.getUser2().getAccount())
+                                        val.getUser2().getEmail(), val.getUser2().getUname(),
+                                        val.getStatus(), val.getUser2().getAccount(), val.getUser2().getPhotoUri())
                         )
                         .toList());
         return friendsListResponse;

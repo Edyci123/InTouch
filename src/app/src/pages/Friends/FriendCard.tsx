@@ -37,12 +37,20 @@ export const FriendCard: React.FC<Props> = ({
     console.log(friend);
 
     return (
-        <IonCard className="ion-no-padding m-1" button>
+        <IonCard className={"ion-no-padding m-1"} button>
             <IonCardContent className="ion-no-padding ion-no-margin">
                 <IonGrid>
                     <IonRow>
-                        <IonCol size="5">
-                            <IonImg src="https://placehold.co/400x400" />
+                        <IonCol className={styles["image-container"]} size="5">
+                            <IonImg
+                                className={styles["friend-image"]}
+                                src={
+                                    friend.photoUri
+                                        ? "http://localhost:8080/api" +
+                                          friend.photoUri
+                                        : "https://placehold.co/400x400"
+                                }
+                            />
                         </IonCol>
                         <IonCol size="7">
                             <div className="centered">
@@ -69,21 +77,32 @@ export const FriendCard: React.FC<Props> = ({
                                     <IonText>{friend.username}</IonText>
                                 </div>
                                 <div>
-                                    {friend.accounts?.snapchatUsername && (
-                                        <IonIcon
-                                            className="ion-margin-end"
-                                            icon={logoSnapchat}
-                                        />
-                                    )}
-                                    {friend.accounts?.instagramUsername && (
-                                        <IonIcon
-                                            className="ion-margin-end"
-                                            icon={logoInstagram}
-                                        />
-                                    )}
-                                    {friend.accounts?.facebookUsername && (
-                                        <IonIcon icon={logoFacebook} />
-                                    )}
+                                    <IonIcon
+                                        className="ion-margin-end"
+                                        color={
+                                            friend.accounts?.snapchatUsername
+                                                ? "primary"
+                                                : undefined
+                                        }
+                                        icon={logoSnapchat}
+                                    />
+                                    <IonIcon
+                                        className="ion-margin-end"
+                                        color={
+                                            friend.accounts?.instagramUsername
+                                                ? "primary"
+                                                : undefined
+                                        }
+                                        icon={logoInstagram}
+                                    />
+                                    <IonIcon
+                                        icon={logoFacebook}
+                                        color={
+                                            friend.accounts?.facebookUsername
+                                                ? "primary"
+                                                : undefined
+                                        }
+                                    />
                                 </div>
                                 {friend.status === FriendshipStatus.pending && (
                                     <div>
