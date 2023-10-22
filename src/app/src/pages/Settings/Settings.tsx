@@ -24,7 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useGlobal } from "../../services/storage/global.store";
 import { api } from "../../services/api/API";
 import { camera } from "ionicons/icons";
-import styles from "./settings.module.scss"
+import styles from "./settings.module.scss";
 
 export const Settings: React.FC = () => {
     const [user, setUser] = useGlobal((state) => [state.user, state.setUser]);
@@ -46,7 +46,11 @@ export const Settings: React.FC = () => {
         try {
             const response = await api.auth.updateAccounts(data);
             if (user) {
-                setUser({ email: user.email, photoUri: user.photoUri, ...data });
+                setUser({
+                    email: user.email,
+                    photoUri: user.photoUri,
+                    ...data,
+                });
             }
             present({
                 message: "Account updated!",
@@ -71,12 +75,19 @@ export const Settings: React.FC = () => {
                         <IonRow className="mb-4">
                             <IonCol className="ion-no-padding" size="4">
                                 <div>
-                                    <img
-                                        className="circle-image"
-                                        src={"http://localhost:8080/api" + user?.photoUri}
-                                    />
+                                    <div className={styles["image-container"]}>
+                                        <img
+                                            className={styles['user-image']}
+                                            src={
+                                                user?.photoUri
+                                                    ? "http://localhost:8080/api" +
+                                                      user?.photoUri
+                                                    : "https://placehold.co/500x400"
+                                            }
+                                        />
+                                    </div>
                                     <IonIcon
-                                        className={styles['change-photo-icon']}
+                                        className={styles["change-photo-icon"]}
                                         slot="icon-only"
                                         icon={camera}
                                     />
