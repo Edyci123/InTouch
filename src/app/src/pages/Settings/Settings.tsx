@@ -68,14 +68,14 @@ export const Settings: React.FC = () => {
     };
 
     const handleCamera = async () => {
-        await Camera.requestPermissions()
+        await Camera.requestPermissions();
         const image = await Camera.getPhoto({
             quality: 90,
             allowEditing: true,
-            resultType: CameraResultType.Base64
-        })
-        console.log(image)
-    }
+            resultType: CameraResultType.Base64,
+        });
+        console.log(image);
+    };
 
     return (
         <BasePage
@@ -88,7 +88,7 @@ export const Settings: React.FC = () => {
                                 <div>
                                     <div className={styles["image-container"]}>
                                         <img
-                                            className={styles['user-image']}
+                                            className={styles["user-image"]}
                                             src={
                                                 user?.photoUri
                                                     ? "http://localhost:8080/api" +
@@ -98,7 +98,7 @@ export const Settings: React.FC = () => {
                                         />
                                     </div>
                                     <IonIcon
-                                    style={{zIndex: 9999}}
+                                        style={{ zIndex: 9999 }}
                                         className={styles["change-photo-icon"]}
                                         slot="icon-only"
                                         icon={camera}
