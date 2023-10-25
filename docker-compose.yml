@@ -1,15 +1,16 @@
 version: '3.9'
 
 services:
-  api: 
+  app: 
     image: 'in-touch:in-touch-docker'
     ports:
       - 8080:8080
+      - 8100:8100
     build: 
       context: .
     container_name: in-touch
     volumes:
-      - ./src/server:/in-touch/.
+      - .:/in-touch/.
     depends_on: 
       - db
     environment:
