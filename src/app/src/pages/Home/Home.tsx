@@ -3,5 +3,11 @@ import { BasePage } from "../../components/BasePage/BasePage";
 import { IonText } from "@ionic/react";
 
 export const Home: React.FC = () => {
-    return <BasePage title="Home" content={<IonText>Home!</IonText>} />;
+    return (
+        <BasePage
+            title="Home"
+            backButton={false}
+            content={<IonText>Home!</IonText>}
+        />
+    );
 };
