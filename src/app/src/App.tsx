@@ -29,24 +29,48 @@ import Routes from "./Routes";
 import { Login } from "./pages/Auth/Login";
 import { Register } from "./pages/Auth/Register";
 import { PrivateRoutes } from "./PrivateRoutes";
+import { useAuth } from "./services/storage/auth.store";
+import { useEffect } from "react";
+import { useGlobal } from "./services/storage/global.store";
+import { api } from "./services/api/API";
 
 setupIonicReact();
 
-const App: React.FC = () => (
-    <IonApp>
-        <IonReactRouter>
-            <Menu />
-            <IonRouterOutlet id="menu-content">
-                <PrivateRoutes />
-                <Route exact path={Routes.login}>
-                    <Login />
-                </Route>
-                <Route exact path={Routes.register}>
-                    <Register />
-                </Route>
-            </IonRouterOutlet>
-        </IonReactRouter>
-    </IonApp>
-);
+const App: React.FC = () => {
+    const [token, isLoggedIn, logout] = useAuth((state) => [
+        state.token,
+        state.isLoggedIn,
+        state.logout,
+    ]);
+    const [setUser] = useGlobal((state) => [state.setUser]);
+
+    useEffect(() => {
+        if (isLoggedIn && token) {
+            api.setToken(token);
+            try {
+                api.auth.me().then((response) => setUser(response));
+            } catch (e) {
+                logout();
+            }
+        }
+    }, [isLoggedIn]);
+
+    return (
+        <IonApp>
+            <IonReactRouter>
+                <Menu />
+                <IonRouterOutlet id="menu-content">
+                    <PrivateRoutes />
+                    <Route exact path={Routes.login}>
+                        <Login />
+                    </Route>
+                    <Route exact path={Routes.register}>
+                        <Register />
+                    </Route>
+                </IonRouterOutlet>
+            </IonReactRouter>
+        </IonApp>
+    );
+};
 
 export default App;

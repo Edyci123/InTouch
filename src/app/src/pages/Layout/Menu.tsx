@@ -8,14 +8,16 @@ import {
     IonMenu,
     IonMenuToggle,
     IonText,
+    useIonToast,
 } from "@ionic/react";
-import { home, logOut } from "ionicons/icons";
+import { home, logOut, people, scan, settings } from "ionicons/icons";
 import React from "react";
 import Routes from "../../Routes";
 import { useAuth } from "../../services/storage/auth.store";
 
 export const Menu: React.FC = () => {
     const [logout] = useAuth((state) => [state.logout]);
+    const [present] = useIonToast();
 
     return (
         <IonMenu side="end" contentId="menu-content">
@@ -26,15 +28,34 @@ export const Menu: React.FC = () => {
                             <IonIcon className="ion-margin-end" icon={home} />
                             <IonText>Home</IonText>
                         </IonItem>
+                        <IonItem button routerLink={Routes.friends}>
+                            <IonIcon className="ion-margin-end" icon={people} />
+                            <IonText>Friends</IonText>
+                        </IonItem>
                     </IonList>
                 </IonMenuToggle>
             </IonContent>
             <IonFooter className="ion-padding ion-no-border no-shadows">
                 <IonMenuToggle>
                     <IonList>
+                        <IonItem button routerLink={Routes.settings}>
+                            <IonIcon
+                                className="ion-margin-end"
+                                icon={settings}
+                            />
+                            <IonText>Settings</IonText>
+                        </IonItem>
                         <IonItem
                             button
-                            onClick={() => logout()}
+                            onClick={() => {
+                                logout();
+                                present({
+                                    message: "You've been logged out successfully!",
+                                    duration: 1000,
+                                    position: "bottom",
+                                    color: "success"
+                                })
+                            }}
                             routerLink={Routes.login}
                         >
                             <IonIcon className="ion-margin-end" icon={logOut} />

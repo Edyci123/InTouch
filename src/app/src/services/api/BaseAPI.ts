@@ -90,7 +90,7 @@ export class BaseAPI {
 
     async PATCH<Response, RequestData = object | null>(
         url: string,
-        data: RequestData | null,
+        data?: RequestData | null,
         config: AxiosRequestConfig = {}
     ) {
         const response = await this.client.patch<Response>(url, data, {

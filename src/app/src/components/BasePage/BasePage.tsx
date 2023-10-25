@@ -2,14 +2,18 @@ import {
     IonBackButton,
     IonButtons,
     IonContent,
+    IonFab,
+    IonFabButton,
     IonFooter,
     IonHeader,
+    IonIcon,
     IonMenuButton,
     IonPage,
     IonTitle,
     IonToolbar,
 } from "@ionic/react";
 import classNames from "classnames";
+import { add, qrCode } from "ionicons/icons";
 import React from "react";
 
 interface Props {
@@ -20,6 +24,8 @@ interface Props {
     title?: string;
     centeredContent?: boolean;
     noHeader?: boolean;
+    scrollable?: boolean;
+    customContent?: React.ReactNode;
 }
 
 export const BasePage: React.FC<Props> = ({
@@ -28,8 +34,10 @@ export const BasePage: React.FC<Props> = ({
     footer,
     menu = true,
     backButton = true,
-    noHeader,
+    noHeader = false,
     title,
+    scrollable = true,
+    customContent,
 }) => {
     return (
         <IonPage>
@@ -47,7 +55,10 @@ export const BasePage: React.FC<Props> = ({
                 </IonHeader>
             )}
             {content && (
-                <IonContent className="ion-padding">
+                <IonContent
+                    scrollY={scrollable}
+                    className={classNames("ion-padding")}
+                >
                     <div
                         className={classNames({
                             centered: centeredContent,
@@ -57,7 +68,12 @@ export const BasePage: React.FC<Props> = ({
                     </div>
                 </IonContent>
             )}
-            {footer && <IonFooter className="ion-padding ion-no-border no-shadows">{footer}</IonFooter>}
+            {footer && (
+                <IonFooter className="ion-padding ion-no-border no-shadows">
+                    {footer}
+                </IonFooter>
+            )}
+            {customContent && customContent}
         </IonPage>
     );
 };
