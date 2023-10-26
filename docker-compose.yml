@@ -1,24 +1,23 @@
 version: '3.9'
 
 services:
-  app: 
+  app:
     image: 'in-touch:in-touch-docker'
     ports:
       - 8080:8080
-      - 8100:8100
-    build: 
-      context: .
+    build:
+      context: ./src/server/
     container_name: in-touch
     volumes:
-      - .:/in-touch/.
-    depends_on: 
+      - ./src/server/:/server/.
+    depends_on:
       - db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/in-touch
       - SPRING_DATASOURCE_USERNAME=in-touch
       - SPRING_DATASOURCE_PASSWORD=in-touch
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-          
+
   db:
     image: 'postgres:16'
     ports:
