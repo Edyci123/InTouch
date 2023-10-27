@@ -45,6 +45,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(requests -> requests
                 .requestMatchers("/auth/register").permitAll()
                 .requestMatchers("/auth/login").permitAll()
+                .requestMatchers("/files/download/*").permitAll()
                 .anyRequest().authenticated());
 
 

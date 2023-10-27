@@ -35,6 +35,10 @@ public class User implements UserDetails {
     @JoinColumn(name = "account_id")
     private Account account;
 
+    @Column(name = "photo_uri")
+    private String photoUri;
+
+
     public User(String email, String password) {
         this.email = email;
         this.password = password;

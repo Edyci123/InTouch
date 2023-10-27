@@ -15,6 +15,7 @@ export const zFriends = z.object({
     username: z.string(),
     status: zFriendshipStatus,
     accounts: zAccount,
+    photoUri: z.string(),
 });
 
 export type IFriends = z.infer<typeof zFriends>;

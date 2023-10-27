@@ -13,4 +13,7 @@ export const APIRoutes = {
         acceptFriendRequest: "/friends/accept/{{userId}}",
         sendFriendRequests: "/friends/send",
     },
+    files: {
+        upload: "/files/upload"
+    }
 };
