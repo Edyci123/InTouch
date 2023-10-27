@@ -8,7 +8,7 @@ import {
     IonRouterLink,
     IonRow,
     IonText,
-    useIonToast
+    useIonToast,
 } from "@ionic/react";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -30,7 +30,10 @@ export const Login: React.FC = () => {
         resolver: zodResolver(zLogin),
     });
 
-    const [login, isLoggedIn] = useAuth((state) => [state.login, state.isLoggedIn]);
+    const [login, isLoggedIn] = useAuth((state) => [
+        state.login,
+        state.isLoggedIn,
+    ]);
 
     console.log(form.formState.errors);
 
@@ -44,8 +47,8 @@ export const Login: React.FC = () => {
                 message: "You've been logged in successfully!",
                 duration: 1000,
                 position: "bottom",
-                color: "success"
-            })
+                color: "success",
+            });
             history.push("/home");
         } catch (e) {
             console.log("error: ", e);
@@ -58,7 +61,7 @@ export const Login: React.FC = () => {
     };
 
     if (isLoggedIn) {
-        return <Redirect to={Routes.home} />
+        return <Redirect to={Routes.home} />;
     }
 
     return (
