@@ -12,7 +12,7 @@ export class API {
 
     constructor() {
         this.client = axios.create({
-            baseURL: "http://localhost:8080/api",
+            baseURL: "http://192.168.1.133:8080/api",
         });
         this.auth = new AuthAPI(this.client);
         this.friends = new FriendsAPI(this.client);

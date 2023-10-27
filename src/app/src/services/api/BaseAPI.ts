@@ -17,7 +17,7 @@ export class BaseAPI {
 
     private config: APIConfig;
 
-    constructor(private client: Axios, config?: APIConfig) {
+    constructor(public client: Axios, config?: APIConfig) {
         this.config = {
             ...{
                 basePrefix: "",

@@ -75,10 +75,19 @@ export const Settings: React.FC = () => {
             resultType: CameraResultType.Uri,
         });
         if (image.webPath) {
+            setIsLoading(true);
             let blob = await fetch(image.webPath).then((r) => r.blob());
             let formData = new FormData();
             formData.append("file", blob);
             await api.files.uploadFile(formData);
+            await api.auth.me().then((response) => setUser(response));
+            present({
+                message: "Account updated!",
+                duration: 1000,
+                position: "bottom",
+                color: "success",
+            });
+            setIsLoading(false);
         }
         console.log(image);
     };
@@ -97,7 +106,7 @@ export const Settings: React.FC = () => {
                                             className={styles["user-image"]}
                                             src={
                                                 user?.photoUri
-                                                    ? "http://localhost:8080/api" +
+                                                    ? "http://192.168.1.133:8080/api" +
                                                       user?.photoUri
                                                     : "https://placehold.co/500x400"
                                             }
