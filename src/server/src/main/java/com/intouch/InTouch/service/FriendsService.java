@@ -19,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +84,7 @@ public class FriendsService {
 
     public Map<String, Object> getFriends(FriendshipStatus status, String username, int page, int size) throws UserNotFoundException {
         User user = UserUtils.getUserFromOptional(userRepository.findByEmail(UserUtils.getEmail()));
-        List<FriendResponse> friendsList = new ArrayList<>();
+        List<FriendResponse> friendsList;
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Friends> friendsPage;

@@ -72,8 +72,14 @@ export const Settings: React.FC = () => {
         const image = await Camera.getPhoto({
             quality: 90,
             allowEditing: true,
-            resultType: CameraResultType.Base64,
+            resultType: CameraResultType.Uri,
         });
+        if (image.webPath) {
+            let blob = await fetch(image.webPath).then((r) => r.blob());
+            let formData = new FormData();
+            formData.append("file", blob);
+            await api.files.uploadFile(formData);
+        }
         console.log(image);
     };
 
@@ -114,7 +120,7 @@ export const Settings: React.FC = () => {
                         </IonRow>
 
                         <IonRow className="mb-4">
-                            <IonCol size="12" className="grid-input">
+                            <IonCol className="grid-input" size="12">
                                 <IonLabel className="fw-700 ion-margin-end">
                                     Username:
                                 </IonLabel>
@@ -125,6 +131,11 @@ export const Settings: React.FC = () => {
                                     type="text"
                                 />
                             </IonCol>
+                            {form.formState.errors.username && (
+                                <IonText color="danger">
+                                    {form.formState.errors.username.message}
+                                </IonText>
+                            )}
                         </IonRow>
 
                         <IonRow className="mb-4">
@@ -133,6 +144,7 @@ export const Settings: React.FC = () => {
                                     Facebook:
                                 </IonLabel>
                                 <IonInput
+                                    className="ion-float-end"
                                     {...form.register(
                                         "accounts.facebookUsername"
                                     )}

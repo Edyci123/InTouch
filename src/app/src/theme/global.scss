@@ -8,9 +8,8 @@
 }
 
 .color-primary {
-    color: (--ion)
+    color: (--ion);
 }
-
 
 .h-100 {
     height: 100% !important;
@@ -48,6 +47,7 @@ ion-app {
 
     ion-input {
         min-height: 2rem !important;
+        max-width: 14rem;
     }
 }
 
