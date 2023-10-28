@@ -26,6 +26,7 @@ interface Props {
     noHeader?: boolean;
     scrollable?: boolean;
     customContent?: React.ReactNode;
+    fixedBottom?: boolean;
 }
 
 export const BasePage: React.FC<Props> = ({
@@ -38,6 +39,7 @@ export const BasePage: React.FC<Props> = ({
     title,
     scrollable = true,
     customContent,
+    fixedBottom = false,
 }) => {
     return (
         <IonPage>
@@ -65,14 +67,15 @@ export const BasePage: React.FC<Props> = ({
                         })}
                     >
                         {content}
+                        {footer && (
+                            <div className={classNames("w-100", {"fix-bottom": fixedBottom})}>
+                                {footer}
+                            </div>
+                        )}
                     </div>
                 </IonContent>
             )}
-            {footer && (
-                <IonFooter className="ion-padding ion-no-border no-shadows">
-                    {footer}
-                </IonFooter>
-            )}
+
             {customContent && customContent}
         </IonPage>
     );

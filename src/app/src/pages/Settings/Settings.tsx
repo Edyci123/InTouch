@@ -106,7 +106,7 @@ export const Settings: React.FC = () => {
                                             className={styles["user-image"]}
                                             src={
                                                 user?.photoUri
-                                                    ? "http://192.168.1.133:8080/api" +
+                                                    ? "http://localhost:8080/api" +
                                                       user?.photoUri
                                                     : "https://placehold.co/500x400"
                                             }
