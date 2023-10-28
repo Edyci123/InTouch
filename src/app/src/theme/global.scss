@@ -119,3 +119,11 @@ ion-app {
     --ion-grid-padding: 0;
     --ion-grid-column-padding: 0;
 }
+
+
+.fix-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}

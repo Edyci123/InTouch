@@ -61,13 +61,12 @@ export const Register: React.FC = () => {
             backButton={false}
             menu={false}
             noHeader={true}
-            title="Login"
-            scrollable={false}
+            title="Register"
             content={
                 <form id="register-form" onSubmit={form.handleSubmit(onSubmit)}>
                     <IonGrid className="ion-padding">
                         <IonRow>
-                            <IonCol className="mt-5 mb-5 ion-text-center">
+                            <IonCol className="mt-5 mb-2 ion-text-center">
                                 <IonText className="fs-32 fw-700">
                                     Register
                                 </IonText>
@@ -154,7 +153,7 @@ export const Register: React.FC = () => {
                         form="register-form"
                         expand="block"
                         shape="round"
-                        className="ion-padding"
+                        className="ion-padding mt-2"
                     >
                         Register
                     </IonButton>
