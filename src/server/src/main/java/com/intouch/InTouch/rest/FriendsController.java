@@ -3,6 +3,7 @@ package com.intouch.InTouch.rest;
 import com.intouch.InTouch.service.FriendsService;
 import com.intouch.InTouch.utils.dtos.friends.SendFriendRequest;
 import com.intouch.InTouch.utils.enums.FriendshipStatus;
+import com.intouch.InTouch.utils.exceptions.FriendshipAlreadyExistsException;
 import com.intouch.InTouch.utils.exceptions.SameUserFriendshipException;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,8 @@ public class FriendsController {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (SameUserFriendshipException ex) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
+        } catch (FriendshipAlreadyExistsException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 

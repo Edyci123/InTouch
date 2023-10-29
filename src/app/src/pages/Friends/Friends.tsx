@@ -215,7 +215,7 @@ export const Friends: React.FC = () => {
                                                     );
                                                     present({
                                                         duration: 1000,
-                                                        message: `You've just deleted, a friend request!`,
+                                                        message: friend.status === FriendshipStatus.sent ? `You've just deleted a friend request!` : `You've just unfriended ${friend.username}`,
                                                         color: "warning",
                                                         position: "bottom",
                                                     });

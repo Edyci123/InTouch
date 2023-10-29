@@ -59,10 +59,10 @@ export const FriendCard: React.FC<Props> = ({
                         </IonCol>
                         <IonCol size="7">
                             <div className="centered">
-                                {friend.status === FriendshipStatus.sent && (
+                                {(friend.status === FriendshipStatus.sent || friend.status === FriendshipStatus.accepted) && (
                                     <IonButton
                                         fill="clear"
-                                        color="light"
+                                        color="primary"
                                         size="small"
                                         className={classNames(
                                             "ion-no-margin",
