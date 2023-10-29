@@ -19,11 +19,17 @@ import { api } from "../../services/api/API";
 import { ILogin, zLogin } from "../../services/models/IAuth";
 import { useAuth } from "../../services/storage/auth.store";
 import styles from "./auth.module.scss";
+import classNames from "classnames";
+import { ForgotPassEnterMailModal } from "./Modals/ForgotPassEnterMailModal";
 
 export const Login: React.FC = () => {
     const history = useHistory();
     const [loading, setLoading] = useState(false);
     const [present] = useIonToast();
+
+    const [forgotPassStep1Modal, setForgotPassStep1Modal] = useState(false);
+    const [forgotPassStep2Modal, setForgotPassStep2Modal] = useState(false);
+    const [forgotPassStep3Modal, setForgotPassStep3Modal] = useState(false);
 
     const form = useForm<ILogin>({
         mode: "all",
@@ -70,7 +76,7 @@ export const Login: React.FC = () => {
             menu={false}
             noHeader={true}
             title="Login"
-            scrollable={false}
+            //scrollable={false}
             content={
                 <form id="login-form" onSubmit={form.handleSubmit(onSubmit)}>
                     <IonGrid className="ion-padding">
@@ -116,8 +122,31 @@ export const Login: React.FC = () => {
                                 )}
                             </IonCol>
                         </IonRow>
+                        <IonRow className="mt-2">
+                            <IonCol>
+                                <IonButton
+                                    fill="clear"
+                                    className={classNames(
+                                        "fs-14 p-0 color-dark-grey text-underline",
+                                        styles["forgot-password-button"]
+                                    )}
+                                    onClick={() =>
+                                        setForgotPassStep1Modal(true)
+                                    }
+                                >
+                                    Forgot your password?
+                                </IonButton>
+                            </IonCol>
+                        </IonRow>
                     </IonGrid>
+
                     <IonLoading isOpen={loading} />
+
+                    <ForgotPassEnterMailModal
+                        isOpen={forgotPassStep1Modal}
+                        onClose={() => setForgotPassStep1Modal(false)}
+                        onSubmit={() => {}}
+                    />
                 </form>
             }
             footer={
@@ -127,7 +156,7 @@ export const Login: React.FC = () => {
                         form="login-form"
                         expand="block"
                         shape="round"
-                        className="ion-padding mt-5"
+                        className="ion-padding mt-4"
                     >
                         Login
                     </IonButton>

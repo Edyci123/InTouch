@@ -7,8 +7,30 @@
     align-items: center;
 }
 
-.color-primary {
-    color: (--ion);
+.d-flex {
+    display: flex;
+}
+
+.centered-no-percentage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.color-light-grey {
+    color: #f2f2f2;
+}
+
+.color-grey {
+    color: #bebebe;
+}
+
+.color-dark-grey {
+    color: #686868;
+}
+
+.color-black {
+    color: black;
 }
 
 .h-100 {
@@ -67,6 +89,10 @@ ion-app {
     height: 100% !important;
 }
 
+.p-0 {
+    padding: 0;
+}
+
 .m-1 {
     margin: 0.5rem;
 }
@@ -111,8 +137,24 @@ ion-app {
     margin-bottom: 5rem;
 }
 
+.fs-12 {
+    font-size: 0.8rem;
+}
+
+.fs-14 {
+    font-size: 0.9rem;
+}
+
+.fs-24 {
+    font-size: 1.5rem;
+}
+
 .fs-32 {
     font-size: 2rem;
+}
+
+.fw-600 {
+    font-weight: 600;
 }
 
 .no-padding-grid {
@@ -120,10 +162,22 @@ ion-app {
     --ion-grid-column-padding: 0;
 }
 
-
 .fix-bottom {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
+}
+
+.custom-input {
+    --background: #f2f2f2;
+    --padding-start: 1rem;
+    --padding-end: 0.3rem;
+    --padding-top: 0.2rem;
+    --padding-bottom: 0.2rem;
+    --border-radius: 1rem !important;
+}
+
+.custom-toolbar {
+    --min-height: 40px !important;
 }
