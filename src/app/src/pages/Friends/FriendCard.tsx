@@ -14,7 +14,7 @@ import {
     close,
     logoFacebook,
     logoInstagram,
-    logoSnapchat
+    logoSnapchat,
 } from "ionicons/icons";
 import React from "react";
 import { FriendshipStatus, IFriends } from "../../services/models/IFriends";
@@ -38,7 +38,11 @@ export const FriendCard: React.FC<Props> = ({
     console.log(friend);
 
     return (
-        <IonCard className={"ion-no-padding m-1"} button onClick={() => handleClick()}>
+        <IonCard
+            className={"ion-no-padding m-1"}
+            button
+            onClick={() => handleClick()}
+        >
             <IonCardContent className="ion-no-padding ion-no-margin">
                 <IonGrid>
                     <IonRow>
@@ -58,14 +62,17 @@ export const FriendCard: React.FC<Props> = ({
                                 {friend.status === FriendshipStatus.sent && (
                                     <IonButton
                                         fill="clear"
+                                        color="light"
                                         size="small"
                                         className={classNames(
                                             "ion-no-margin",
                                             styles["close-button"]
                                         )}
-                                        onClick={() =>
-                                            handleCancelFriendRequest()
-                                        }
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            handleCancelFriendRequest();
+                                        }}
                                     >
                                         <IonIcon
                                             slot="icon-only"
