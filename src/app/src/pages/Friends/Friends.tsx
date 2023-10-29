@@ -1,3 +1,5 @@
+import { Camera } from "@capacitor/camera";
+import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import {
     IonCol,
     IonFab,
@@ -6,8 +8,6 @@ import {
     IonIcon,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
-    IonItem,
-    IonList,
     IonRow,
     IonSearchbar,
     IonSegment,
@@ -15,22 +15,24 @@ import {
     IonText,
     useIonToast,
 } from "@ionic/react";
+import { add, qrCode } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { BasePage } from "../../components/BasePage/BasePage";
-import { FriendCard } from "./FriendCard";
-import { add, qrCode } from "ionicons/icons";
-import { ShowQRModal } from "./Modals/ShowQRModal";
-import { Camera } from "@capacitor/camera";
-import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import { api } from "../../services/api/API";
-import { FriendshipStatus, IFriends } from "../../services/models/IFriends";
 import { ISearchFriends, ISearchResult } from "../../services/api/FriendsAPI";
+import { FriendshipStatus, IFriends } from "../../services/models/IFriends";
+import { FriendCard } from "./FriendCard";
+import { ShowQRModal } from "./Modals/ShowQRModal";
+import { FriendDetailsModal } from "./Modals/FriendDetailsModal";
 
 export const Friends: React.FC = () => {
     const [present] = useIonToast();
     const [isLoading, setIsLoading] = useState(false);
 
     const [showQRModal, setShowQRModal] = useState(false);
+    const [friendDetailsModal, setFriendDetailsModal] =
+        useState<IFriends | null>(null);
+
     const [friendsRes, setFriendsRes] = useState<ISearchResult>();
     const [currentPage, setCurrentPage] = useState(0);
     const [searchParams, setSearchParams] = useState<ISearchFriends>({
@@ -168,6 +170,11 @@ export const Friends: React.FC = () => {
                                         <IonCol size="12">
                                             <FriendCard
                                                 friend={friend}
+                                                handleClick={() => {
+                                                    setFriendDetailsModal(
+                                                        friend
+                                                    );
+                                                }}
                                                 handleAcceptFriendRequest={async () => {
                                                     await api.friends.acceptFriendRequest(
                                                         friend.id
@@ -266,6 +273,11 @@ export const Friends: React.FC = () => {
             <ShowQRModal
                 isOpen={showQRModal}
                 onClose={() => setShowQRModal(false)}
+            />
+            <FriendDetailsModal
+                friend={friendDetailsModal}
+                onClose={() => setFriendDetailsModal(null)}
+                isOpen={!!friendDetailsModal}
             />
         </>
     );

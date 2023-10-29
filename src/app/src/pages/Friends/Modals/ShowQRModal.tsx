@@ -7,7 +7,7 @@ import {
 import React from "react";
 import QRCode from "react-qr-code";
 import { useGlobal } from "../../../services/storage/global.store";
-import styles from "./QR.module.scss";
+import styles from "./modals.module.scss";
 
 interface Props {
     isOpen: boolean;
