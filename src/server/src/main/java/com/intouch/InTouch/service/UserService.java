@@ -99,8 +99,8 @@ public class UserService {
     }
 
     @Transactional
-    public void validateCodeChangePassword(String code, String newPassword) throws UserNotFoundException, InvalidCodeException {
-        User user = UserUtils.getUserFromOptional(userRepository.findByCode(code));
+    public void validateCodeChangePassword(String email, String code, String newPassword) throws UserNotFoundException, InvalidCodeException {
+        User user = UserUtils.getUserFromOptional(userRepository.findByEmail(email));
         if (user.getCode().equals(code)) {
             user.setPassword(encodedPassword(newPassword));
         } else {
