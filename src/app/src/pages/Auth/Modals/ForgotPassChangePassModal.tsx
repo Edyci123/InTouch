@@ -7,23 +7,28 @@ import {
     IonModal,
     IonText,
     IonTitle,
-    IonToolbar
+    IonToolbar,
 } from "@ionic/react";
 import classNames from "classnames";
 import React, { useState } from "react";
+import styles from "../auth.module.scss";
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
-    onSubmit: (email: string) => void;
+    onSubmit: (code: string, newPassword: string) => void;
 }
 
-export const ForgotPassEnterMailModal: React.FC<Props> = ({
+export const ForgotPassChangePassModal: React.FC<Props> = ({
     isOpen,
     onClose,
     onSubmit,
 }) => {
-    const [email, setEmail] = useState("");
+    const [code, setCode] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+    console.log(code);
 
     return (
         <IonModal isOpen={isOpen} onIonModalDidDismiss={() => onClose()}>
@@ -45,18 +50,42 @@ export const ForgotPassEnterMailModal: React.FC<Props> = ({
                 <div className={classNames("h-100 ion-padding")}>
                     <div className="mt-3">
                         <IonText className="fs-14">
-                            To change it, complete the input below and you will
-                            be sent an email containing a verficiation-code.
+                            Enter the code and the desired password
                         </IonText>
                     </div>
 
                     <IonInput
-                        className={classNames("mt-4 custom-input")}
-                        value={email}
-                        onIonChange={(e) => {
-                            e.detail.value && setEmail(e.detail.value);
+                        type="number"
+                        className={classNames(
+                            "mt-3 custom-input",
+                            styles["code-input"]
+                        )}
+                        value={code}
+                        onIonInput={(e) => {
+                            e.detail.value &&
+                                e.detail.value.length <= 4 &&
+                                setCode(e.detail.value);
                         }}
-                        placeholder="Email"
+                    />
+
+                    <IonInput
+                        type="password"
+                        className={classNames("mt-3 custom-input")}
+                        value={newPassword}
+                        onIonChange={(e) => {
+                            e.detail.value && setNewPassword(e.detail.value);
+                        }}
+                        placeholder="Password"
+                    />
+
+                    <IonInput
+                        type="password"
+                        className={classNames("mt-3 custom-input")}
+                        value={newPassword}
+                        onIonChange={(e) => {
+                            e.detail.value && setNewPassword(e.detail.value);
+                        }}
+                        placeholder="Confirm Password"
                     />
                 </div>
             </IonContent>
@@ -66,7 +95,7 @@ export const ForgotPassEnterMailModal: React.FC<Props> = ({
                     shape="round"
                     className="fw-700"
                     onClick={() => {
-                        onSubmit(email);
+                        onSubmit(code, newPassword);
                         onClose();
                     }}
                 >

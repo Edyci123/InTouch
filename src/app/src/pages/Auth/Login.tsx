@@ -21,6 +21,7 @@ import { useAuth } from "../../services/storage/auth.store";
 import styles from "./auth.module.scss";
 import classNames from "classnames";
 import { ForgotPassEnterMailModal } from "./Modals/ForgotPassEnterMailModal";
+import { ForgotPassChangePassModal } from "./Modals/ForgotPassChangePassModal";
 
 export const Login: React.FC = () => {
     const history = useHistory();
@@ -29,7 +30,6 @@ export const Login: React.FC = () => {
 
     const [forgotPassStep1Modal, setForgotPassStep1Modal] = useState(false);
     const [forgotPassStep2Modal, setForgotPassStep2Modal] = useState(false);
-    const [forgotPassStep3Modal, setForgotPassStep3Modal] = useState(false);
 
     const form = useForm<ILogin>({
         mode: "all",
@@ -145,6 +145,14 @@ export const Login: React.FC = () => {
                     <ForgotPassEnterMailModal
                         isOpen={forgotPassStep1Modal}
                         onClose={() => setForgotPassStep1Modal(false)}
+                        onSubmit={() => {
+                            setForgotPassStep2Modal(true);
+                        }}
+                    />
+
+                    <ForgotPassChangePassModal
+                        isOpen={forgotPassStep2Modal}
+                        onClose={() => setForgotPassStep2Modal(false)}
                         onSubmit={() => {}}
                     />
                 </form>

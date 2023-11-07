@@ -1,3 +1,9 @@
 .forgot-password-button {
     --padding-start: 0;
 }
+
+.code-input {
+    input {
+        text-align: center !important;
+    }
+}
