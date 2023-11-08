@@ -80,70 +80,81 @@ export const Login: React.FC = () => {
             title="Login"
             //scrollable={false}
             content={
-                <form id="login-form" onSubmit={form.handleSubmit(onSubmit)}>
-                    <IonGrid className="ion-padding">
-                        <IonRow>
-                            <IonCol className="mt-5 mb-5 ion-text-center">
-                                <IonText className="fs-32 fw-700">
-                                    Login
-                                </IonText>
-                            </IonCol>
-                        </IonRow>
-                        <IonRow className="mt-5">
-                            <IonCol size="12">
-                                <IonInput
-                                    mode="md"
-                                    label="Email*"
-                                    label-placement="floating"
-                                    fill="outline"
-                                    type="text"
-                                    //placeholder="Email*"
-                                    {...form.register("email")}
-                                />
-                                {form.formState.errors.email && (
-                                    <IonText color="danger">
-                                        {form.formState.errors.email.message}
+                <>
+                    <form
+                        id="login-form"
+                        onSubmit={form.handleSubmit(onSubmit)}
+                    >
+                        <IonGrid className="ion-padding">
+                            <IonRow>
+                                <IonCol className="mt-5 mb-5 ion-text-center">
+                                    <IonText className="fs-32 fw-700">
+                                        Login
                                     </IonText>
-                                )}
-                            </IonCol>
-                            <IonCol className="mt-1" size="12">
-                                <IonInput
-                                    mode="md"
-                                    {...form.register("password")}
-                                    className={styles["custom-input"]}
-                                    label="Password*"
-                                    label-placement="floating"
-                                    fill="outline"
-                                    type="password"
-                                    placeholder="Password*"
-                                />
-                                {form.formState.errors.password && (
-                                    <IonText color="danger">
-                                        {form.formState.errors.password.message}
-                                    </IonText>
-                                )}
-                            </IonCol>
-                        </IonRow>
-                        <IonRow className="mt-2">
-                            <IonCol>
-                                <IonButton
-                                    fill="clear"
-                                    className={classNames(
-                                        "fs-14 p-0 color-dark-grey text-underline",
-                                        styles["forgot-password-button"]
+                                </IonCol>
+                            </IonRow>
+                            <IonRow className="mt-5">
+                                <IonCol size="12">
+                                    <IonInput
+                                        mode="md"
+                                        label="Email*"
+                                        label-placement="floating"
+                                        fill="outline"
+                                        type="text"
+                                        //placeholder="Email*"
+                                        {...form.register("email")}
+                                    />
+                                    {form.formState.errors.email && (
+                                        <IonText color="danger">
+                                            {
+                                                form.formState.errors.email
+                                                    .message
+                                            }
+                                        </IonText>
                                     )}
-                                    onClick={() =>
-                                        setForgotPassStep1Modal(true)
-                                    }
-                                >
-                                    Forgot your password?
-                                </IonButton>
-                            </IonCol>
-                        </IonRow>
-                    </IonGrid>
+                                </IonCol>
+                                <IonCol className="mt-1" size="12">
+                                    <IonInput
+                                        mode="md"
+                                        {...form.register("password")}
+                                        className={styles["custom-input"]}
+                                        label="Password*"
+                                        label-placement="floating"
+                                        fill="outline"
+                                        type="password"
+                                        placeholder="Password*"
+                                    />
+                                    {form.formState.errors.password && (
+                                        <IonText color="danger">
+                                            {
+                                                form.formState.errors.password
+                                                    .message
+                                            }
+                                        </IonText>
+                                    )}
+                                </IonCol>
+                            </IonRow>
+                            <IonRow className="mt-2">
+                                <IonCol>
+                                    <IonButton
+                                        mode="ios"
+                                        fill="clear"
+                                        className={classNames(
+                                            "fs-14 p-0 color-dark-grey text-underline",
+                                            styles["forgot-password-button"]
+                                        )}
+                                        onClick={() =>
+                                            setForgotPassStep1Modal(true)
+                                        }
+                                    >
+                                        Forgot your password?
+                                    </IonButton>
+                                </IonCol>
+                            </IonRow>
+                        </IonGrid>
 
-                    <IonLoading isOpen={loading} />
-
+                        <IonLoading isOpen={loading} />
+                    </form>
                     <ForgotPassEnterMailModal
                         isOpen={forgotPassStep1Modal}
                         onClose={() => setForgotPassStep1Modal(false)}
@@ -157,7 +168,7 @@ export const Login: React.FC = () => {
                         isOpen={forgotPassStep2Modal}
                         onClose={() => setForgotPassStep2Modal(false)}
                     />
-                </form>
+                </>
             }
             footer={
                 <>

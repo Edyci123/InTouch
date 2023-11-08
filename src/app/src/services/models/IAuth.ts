@@ -59,6 +59,24 @@ export const zForgotPassword = z
         }
     });
 
+export const zForgotPasswordEmail = z
+    .object({
+        email: z.string().email(),
+    })
+    .superRefine((arg, ctx) => {
+        try {
+            api.auth.accountExists(arg.email);
+        } catch (e) {
+            ctx.addIssue({
+                code: "custom",
+                message: "The email is not associated to any account!",
+                path: ["email"],
+            });
+        }
+    });
+
+export type IForgotPasswordEmail = z.infer<typeof zForgotPasswordEmail>;
+
 export type IForgotPassword = z.infer<typeof zForgotPassword>;
 
 export type IRegister = z.infer<typeof zRegister>;

@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .requestMatchers("/auth/login").permitAll()
                 .requestMatchers("/files/download/*").permitAll()
                 .requestMatchers("/auth/reset/*").permitAll()
-                .requestMatchers("/auth/exists").permitAll()
+                .requestMatchers("/auth/account/exists").permitAll()
                 .anyRequest().authenticated());
 
 

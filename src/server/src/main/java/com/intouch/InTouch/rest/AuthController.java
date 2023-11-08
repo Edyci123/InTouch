@@ -71,7 +71,13 @@ public class AuthController {
 
     @PostMapping("/reset/password")
     public ResponseEntity<?> resetPassword(@RequestBody AuthCodeAndPassword authCodeAndPassword) throws UserNotFoundException, InvalidCodeException {
-        userService.validateCodeChangePassword(authCodeAndPassword.getEmail(), authCodeAndPassword.getCode(), authCodeAndPassword.getNewPassword());
+        userService.validateCodeChangePassword(authCodeAndPassword.getEmail(), authCodeAndPassword.getCode(), authCodeAndPassword.getPassword());
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/account/exists")
+    public ResponseEntity<?> checkExistence(@RequestBody AccountExistence accountExistence) throws UserNotFoundException {
+        userService.checkUserExistence(accountExistence.getEmail());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

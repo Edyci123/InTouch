@@ -6,7 +6,7 @@ export const APIRoutes = {
         register: "/auth/register",
         me: "/me",
         updateAccounts: "/me/update",
-        accountExists: "/auth/exists",
+        accountExists: "/auth/account/exists",
         resetCode: "/auth/reset/code",
         resetPassword: "/auth/reset/password",
     },

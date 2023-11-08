@@ -108,6 +108,10 @@ public class UserService {
         }
     }
 
+    public void checkUserExistence(String email) throws UserNotFoundException {
+        User user = UserUtils.getUserFromOptional(userRepository.findByEmail(email));
+    }
+
     private String encodedPassword(String password) {
         return passwordEncoder.encode(password);
     }

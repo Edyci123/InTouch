@@ -31,7 +31,10 @@ export const ForgotPassChangePassModal: React.FC<Props> = ({
     isOpen,
     onClose,
 }) => {
-    const email = useForgotPass((state) => state.email);
+    const [email, setEmail] = useForgotPass((state) => [
+        state.email,
+        state.setEmail,
+    ]);
 
     const form = useForm<IForgotPassword>({
         mode: "all",
@@ -43,7 +46,9 @@ export const ForgotPassChangePassModal: React.FC<Props> = ({
     const handleSubmit: SubmitHandler<IForgotPassword> = async (data) => {
         try {
             setIsLoading(true);
-            api.auth.resetPassword(data);
+            await api.auth.resetPassword(data);
+            form.reset();
+            setEmail("");
             onClose();
         } catch (e) {
             form.setError("code", { message: "Invalid code!" });
@@ -52,8 +57,14 @@ export const ForgotPassChangePassModal: React.FC<Props> = ({
         }
     };
 
+    const handleClose = () => {
+        setEmail("");
+        form.reset();
+        onClose();
+    };
+
     return (
-        <IonModal isOpen={isOpen} onIonModalDidDismiss={() => onClose()}>
+        <IonModal isOpen={isOpen} onIonModalDidDismiss={() => handleClose()}>
             <IonHeader mode="md">
                 <IonToolbar className="custom-toolbar">
                     <IonTitle className="w-100 ion-text-center fs-14">
@@ -62,7 +73,10 @@ export const ForgotPassChangePassModal: React.FC<Props> = ({
                 </IonToolbar>
             </IonHeader>
             <IonContent scrollY={false}>
-                <form id="change-pass">
+                <form
+                    id="change-pass"
+                    onSubmit={form.handleSubmit(handleSubmit)}
+                >
                     <div className={classNames("d-flex ion-padding")}>
                         <div className="mt-2 mb-2 fw-700 fs-24">
                             <IonText color={"primary"}>
