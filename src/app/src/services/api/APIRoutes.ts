@@ -7,8 +7,8 @@ export const APIRoutes = {
         me: "/me",
         updateAccounts: "/me/update",
         accountExists: "/auth/exists",
-        resetCode: "/reset/code",
-        resetPassword: "/reset/password",
+        resetCode: "/auth/reset/code",
+        resetPassword: "/auth/reset/password",
     },
     friends: {
         getFriends: "/friends/{{status}}",

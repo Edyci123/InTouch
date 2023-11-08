@@ -35,7 +35,7 @@ export const ForgotPassChangePassModal: React.FC<Props> = ({
 
     const form = useForm<IForgotPassword>({
         mode: "all",
-        defaultValues: { email },
+        values: { email: email, code: "", password: "", confirmPassword: "" },
         resolver: zodResolver(zForgotPassword),
     });
     const [isLoading, setIsLoading] = useState(false);
