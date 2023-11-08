@@ -2,19 +2,15 @@ import {
     IonBackButton,
     IonButtons,
     IonContent,
-    IonFab,
-    IonFabButton,
-    IonFooter,
     IonHeader,
-    IonIcon,
     IonMenuButton,
     IonPage,
     IonTitle,
     IonToolbar,
 } from "@ionic/react";
 import classNames from "classnames";
-import { add, qrCode } from "ionicons/icons";
 import React from "react";
+import styles from "./BasePage.module.scss";
 
 interface Props {
     content?: React.ReactNode;
@@ -44,7 +40,13 @@ export const BasePage: React.FC<Props> = ({
     return (
         <IonPage>
             {!noHeader && (
-                <IonHeader>
+                <IonHeader
+                    // className={classNames(
+                    //     "ion-no-border",
+                    //     styles["custom-header"]
+                    // )}
+                    mode="ios"
+                >
                     <IonToolbar>
                         {backButton && (
                             <IonButtons slot="start">
@@ -68,7 +70,11 @@ export const BasePage: React.FC<Props> = ({
                     >
                         {content}
                         {footer && (
-                            <div className={classNames("w-100", {"fix-bottom": fixedBottom})}>
+                            <div
+                                className={classNames("w-100", {
+                                    "fix-bottom": fixedBottom,
+                                })}
+                            >
                                 {footer}
                             </div>
                         )}

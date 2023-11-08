@@ -1,5 +1,6 @@
 package com.intouch.InTouch.rest;
 
+import com.intouch.InTouch.utils.exceptions.InvalidCodeException;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
 import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +26,11 @@ public class ExceptionsControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidCodeException.class)
+    public ResponseEntity<String> handleInvalidCodeException(InvalidCodeException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 
     @Override

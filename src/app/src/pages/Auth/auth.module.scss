@@ -1,4 +1,9 @@
-.custom-input {
-   // --border-color: #f2f2f2 !important;
-   // --background: #f2f2f2
+.forgot-password-button {
+    --padding-start: 0;
+}
+
+.code-input {
+    input {
+        text-align: center !important;
+    }
 }

@@ -23,7 +23,6 @@ public class UserController {
     public ResponseEntity<?> updateAccount(@RequestBody PartialUpdateUserRequest updateUserRequest) throws UserNotFoundException {
             userService.partialUpdateUser(updateUserRequest);
             return ResponseEntity.status(HttpStatus.OK).build();
-
     }
 
     @GetMapping("/users")

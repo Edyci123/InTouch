@@ -6,6 +6,9 @@ export const APIRoutes = {
         register: "/auth/register",
         me: "/me",
         updateAccounts: "/me/update",
+        accountExists: "/auth/account/exists",
+        resetCode: "/auth/reset/code",
+        resetPassword: "/auth/reset/password",
     },
     friends: {
         getFriends: "/friends/{{status}}",
@@ -14,6 +17,6 @@ export const APIRoutes = {
         sendFriendRequests: "/friends/send",
     },
     files: {
-        upload: "/files/upload"
-    }
+        upload: "/files/upload",
+    },
 };

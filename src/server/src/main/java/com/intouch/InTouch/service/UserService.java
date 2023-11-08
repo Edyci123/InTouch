@@ -6,6 +6,7 @@ import com.intouch.InTouch.utils.UserUtils;
 import com.intouch.InTouch.utils.dtos.auth.RegisterRequest;
 import com.intouch.InTouch.utils.dtos.users.PartialUpdateUserRequest;
 import com.intouch.InTouch.utils.dtos.users.UserResponse;
+import com.intouch.InTouch.utils.exceptions.InvalidCodeException;
 import com.intouch.InTouch.utils.exceptions.UserAlreadyExistsException;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
 import lombok.Getter;
@@ -85,6 +86,34 @@ public class UserService {
     public UserResponse getCurrentUser() throws UserNotFoundException {
         User user = UserUtils.getUserFromOptional(userRepository.findByEmail(UserUtils.getEmail()));
         return new UserResponse(user.getEmail(), user.getUname(), user.getAccount(), user.getPhotoUri());
+    }
+
+    @Transactional
+    public void createCode(String email) throws UserNotFoundException {
+        User user = UserUtils.getUserFromOptional(userRepository.findByEmail(email));
+        Random random = new Random();
+        String code = String.format("%04d", random.nextInt(10000));
+        user.setCode(code);
+        System.out.println(code);
+        //send email
+    }
+
+    @Transactional
+    public void validateCodeChangePassword(String email, String code, String newPassword) throws UserNotFoundException, InvalidCodeException {
+        User user = UserUtils.getUserFromOptional(userRepository.findByEmail(email));
+        if (user.getCode().equals(code)) {
+            user.setPassword(encodedPassword(newPassword));
+        } else {
+            user.setAttempts(user.getAttempts() + 1);
+            if (user.getAttempts() >= 3) {
+                throw new InvalidCodeException("Invalid code! No more attempts available!");
+            }
+            throw new InvalidCodeException("Invalid code!");
+        }
+    }
+
+    public void checkUserExistence(String email) throws UserNotFoundException {
+        User user = UserUtils.getUserFromOptional(userRepository.findByEmail(email));
     }
 
     private String encodedPassword(String password) {
