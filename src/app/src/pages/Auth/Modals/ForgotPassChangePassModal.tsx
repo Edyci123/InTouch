@@ -20,21 +20,22 @@ import {
 } from "../../../services/models/IAuth";
 import styles from "../auth.module.scss";
 import { api } from "../../../services/api/API";
+import { useForgotPass } from "../fogotPassword.store";
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
-    onSubmit: (code: string, newPassword: string) => void;
 }
 
 export const ForgotPassChangePassModal: React.FC<Props> = ({
     isOpen,
     onClose,
-    onSubmit,
 }) => {
+    const email = useForgotPass((state) => state.email);
+
     const form = useForm<IForgotPassword>({
         mode: "all",
-        defaultValues: {},
+        defaultValues: { email },
         resolver: zodResolver(zForgotPassword),
     });
     const [isLoading, setIsLoading] = useState(false);

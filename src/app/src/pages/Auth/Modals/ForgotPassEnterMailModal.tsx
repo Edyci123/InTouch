@@ -7,10 +7,11 @@ import {
     IonModal,
     IonText,
     IonTitle,
-    IonToolbar
+    IonToolbar,
 } from "@ionic/react";
 import classNames from "classnames";
 import React, { useState } from "react";
+import { api } from "../../../services/api/API";
 
 interface Props {
     isOpen: boolean;
@@ -24,6 +25,7 @@ export const ForgotPassEnterMailModal: React.FC<Props> = ({
     onSubmit,
 }) => {
     const [email, setEmail] = useState("");
+    const [error, setError] = useState("");
 
     return (
         <IonModal isOpen={isOpen} onIonModalDidDismiss={() => onClose()}>
@@ -65,9 +67,16 @@ export const ForgotPassEnterMailModal: React.FC<Props> = ({
                     expand="block"
                     shape="round"
                     className="fw-700"
-                    onClick={() => {
-                        onSubmit(email);
-                        onClose();
+                    onClick={async () => {
+                        try {
+                            await api.auth.resetCode(email);
+                            onSubmit(email);
+                            onClose();
+                        } catch (e) {
+                            setError(
+                                "The email is not associated to any account!"
+                            );
+                        }
                     }}
                 >
                     Next Step
