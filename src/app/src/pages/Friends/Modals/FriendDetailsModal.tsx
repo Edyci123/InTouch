@@ -12,6 +12,7 @@ import {
     IonText,
     IonTitle,
     IonToolbar,
+    useIonToast,
 } from "@ionic/react";
 import {
     logoFacebook,
@@ -20,6 +21,7 @@ import {
     mail,
 } from "ionicons/icons";
 import styles from "./modals.module.scss";
+import { Clipboard } from "@capacitor/clipboard";
 
 interface Props {
     friend: IFriends | null;
@@ -32,6 +34,8 @@ export const FriendDetailsModal: React.FC<Props> = ({
     isOpen,
     onClose,
 }) => {
+    const [present] = useIonToast();
+
     return (
         <IonModal
             className={styles["friend-details-modal"]}
@@ -47,7 +51,22 @@ export const FriendDetailsModal: React.FC<Props> = ({
                 <IonGrid>
                     <IonRow>
                         <IonCol size="6">
-                            <IonButton className="centered" color="light">
+                            <IonButton
+                                className="centered"
+                                color="light"
+                                onClick={async () => {
+                                    await Clipboard.write({
+                                        string: friend?.email,
+                                    });
+                                    present({
+                                        message:
+                                            "Copied email address to clipboard!",
+                                        duration: 1000,
+                                        position: "bottom",
+                                        color: "light",
+                                    });
+                                }}
+                            >
                                 <IonIcon slot="icon-only" icon={mail} />
                             </IonButton>
                         </IonCol>
@@ -58,6 +77,19 @@ export const FriendDetailsModal: React.FC<Props> = ({
                                 disabled={
                                     friend?.accounts.facebookUsername === ""
                                 }
+                                onClick={async () => {
+                                    await Clipboard.write({
+                                        string: friend?.accounts
+                                            .facebookUsername,
+                                    });
+                                    present({
+                                        message:
+                                            "Copied facebook username to clipboard!",
+                                        duration: 1000,
+                                        position: "bottom",
+                                        color: "light",
+                                    });
+                                }}
                             >
                                 <IonIcon slot="icon-only" icon={logoFacebook} />
                             </IonButton>
@@ -69,6 +101,19 @@ export const FriendDetailsModal: React.FC<Props> = ({
                                 disabled={
                                     friend?.accounts.snapchatUsername === ""
                                 }
+                                onClick={async () => {
+                                    await Clipboard.write({
+                                        string: friend?.accounts
+                                            .snapchatUsername,
+                                    });
+                                    present({
+                                        message:
+                                            "Copied snapchat username to clipboard!",
+                                        duration: 1000,
+                                        position: "bottom",
+                                        color: "light",
+                                    });
+                                }}
                             >
                                 <IonIcon slot="icon-only" icon={logoSnapchat} />
                             </IonButton>
@@ -80,6 +125,19 @@ export const FriendDetailsModal: React.FC<Props> = ({
                                 disabled={
                                     friend?.accounts.instagramUsername === ""
                                 }
+                                onClick={async () => {
+                                    await Clipboard.write({
+                                        string: friend?.accounts
+                                            .instagramUsername,
+                                    });
+                                    present({
+                                        message:
+                                            "Copied instagram username to clipboard!",
+                                        duration: 1000,
+                                        position: "bottom",
+                                        color: "light",
+                                    });
+                                }}
                             >
                                 <IonIcon
                                     slot="icon-only"
