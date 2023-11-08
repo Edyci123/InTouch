@@ -39,18 +39,11 @@ export const ForgotPassEnterMailModal: React.FC<Props> = ({
         resolver: zodResolver(zForgotPasswordEmail),
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [present] = useIonToast();
 
     const handleSubmit: SubmitHandler<IForgotPasswordEmail> = async (data) => {
         try {
             setIsLoading(true);
             await api.auth.resetCode(data.email);
-            present({
-                message: "You've changed your password successfully!",
-                duration: 1000,
-                position: "bottom",
-                color: "success",
-            });
             form.reset();
             onSubmit(data.email);
             onClose();

@@ -10,6 +10,7 @@ import {
     IonText,
     IonTitle,
     IonToolbar,
+    useIonToast,
 } from "@ionic/react";
 import classNames from "classnames";
 import React, { useState } from "react";
@@ -35,6 +36,7 @@ export const ForgotPassChangePassModal: React.FC<Props> = ({
         state.email,
         state.setEmail,
     ]);
+    const [present] = useIonToast();
 
     const form = useForm<IForgotPassword>({
         mode: "all",
@@ -47,9 +49,13 @@ export const ForgotPassChangePassModal: React.FC<Props> = ({
         try {
             setIsLoading(true);
             await api.auth.resetPassword(data);
-            form.reset();
-            setEmail("");
-            onClose();
+            present({
+                message: "You've changed your password successfully!",
+                duration: 1000,
+                position: "bottom",
+                color: "success",
+            });
+            handleClose();
         } catch (e) {
             form.setError("code", { message: "Invalid code!" });
         } finally {

@@ -104,6 +104,10 @@ public class UserService {
         if (user.getCode().equals(code)) {
             user.setPassword(encodedPassword(newPassword));
         } else {
+            user.setAttempts(user.getAttempts() + 1);
+            if (user.getAttempts() >= 3) {
+                throw new InvalidCodeException("Invalid code! No more attempts available!");
+            }
             throw new InvalidCodeException("Invalid code!");
         }
     }
