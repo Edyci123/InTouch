@@ -9,7 +9,7 @@ interface Props {
     onClose: () => void;
 }
 
-export const ShowQRModal: React.FC<Props> = ({ isOpen, onClose }) => {
+export const QRModal: React.FC<Props> = ({ isOpen, onClose }) => {
     const [user] = useGlobal((state) => [state.user]);
 
     return (

@@ -1,3 +1,5 @@
+import { Camera } from "@capacitor/camera";
+import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import {
     IonCol,
     IonFab,
@@ -6,25 +8,21 @@ import {
     IonIcon,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
-    IonItem,
-    IonList,
     IonRow,
     IonSearchbar,
     IonSegment,
     IonSegmentButton,
     IonText,
-    useIonToast,
+    useIonToast
 } from "@ionic/react";
+import { add, qrCode } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { BasePage } from "../../components/BasePage/BasePage";
-import { FriendCard } from "./FriendCard";
-import { add, qrCode } from "ionicons/icons";
-import { ShowQRModal } from "./Modals/ShowQRModal";
-import { Camera } from "@capacitor/camera";
-import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import { api } from "../../services/api/API";
-import { FriendshipStatus, IFriends } from "../../services/models/IFriends";
 import { ISearchFriends, ISearchResult } from "../../services/api/FriendsAPI";
+import { FriendshipStatus, IFriends } from "../../services/models/IFriends";
+import { FriendCard } from "./FriendCard";
+import { QRModal } from "./Modals/ShowQRModal";
 
 export const Friends: React.FC = () => {
     const [present] = useIonToast();
@@ -165,7 +163,7 @@ export const Friends: React.FC = () => {
                             {friendsRes?.friends.length !== 0 ? (
                                 friendsRes?.friends.map((friend, index) => (
                                     <IonRow key={index}>
-                                        <IonCol size="12">
+                                        <IonCol key={index} size="12">
                                             <FriendCard
                                                 friend={friend}
                                                 handleAcceptFriendRequest={async () => {
@@ -263,7 +261,7 @@ export const Friends: React.FC = () => {
                     </>
                 }
             />
-            <ShowQRModal
+            <QRModal
                 isOpen={showQRModal}
                 onClose={() => setShowQRModal(false)}
             />
