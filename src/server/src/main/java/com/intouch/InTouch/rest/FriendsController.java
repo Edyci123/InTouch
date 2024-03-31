@@ -22,7 +22,7 @@ public class FriendsController {
         this.friendsService = friendsService;
     }
 
-    @GetMapping()
+    @GetMapping("/")
     public ResponseEntity<?> getFriendsOfUser(
             @RequestParam(required = false) String username,
             @RequestParam String status,
