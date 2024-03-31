@@ -9,9 +9,9 @@ import {
     IonRow,
     IonText,
 } from "@ionic/react";
+import classNames from "classnames";
 import {
     close,
-    link,
     logoFacebook,
     logoInstagram,
     logoSnapchat,
@@ -19,13 +19,13 @@ import {
 import React from "react";
 import { FriendshipStatus, IFriends } from "../../services/models/IFriends";
 import styles from "./friends.module.scss";
-import classNames from "classnames";
 
 interface Props {
     friend: IFriends;
     handleAcceptFriendRequest: () => void;
     handleReject: () => void;
     handleCancelFriendRequest: () => void;
+    handleClick: () => void;
 }
 
 export const FriendCard: React.FC<Props> = ({
@@ -33,11 +33,16 @@ export const FriendCard: React.FC<Props> = ({
     handleAcceptFriendRequest,
     handleReject,
     handleCancelFriendRequest,
+    handleClick,
 }) => {
     console.log(friend);
 
     return (
-        <IonCard className={"ion-no-padding m-1"} button>
+        <IonCard
+            className={"ion-no-padding m-1"}
+            button
+            onClick={() => handleClick()}
+        >
             <IonCardContent className="ion-no-padding ion-no-margin">
                 <IonGrid>
                     <IonRow>
@@ -54,17 +59,20 @@ export const FriendCard: React.FC<Props> = ({
                         </IonCol>
                         <IonCol size="7">
                             <div className="centered">
-                                {friend.status === FriendshipStatus.sent && (
+                                {(friend.status === FriendshipStatus.sent || friend.status === FriendshipStatus.accepted) && (
                                     <IonButton
                                         fill="clear"
+                                        color="primary"
                                         size="small"
                                         className={classNames(
                                             "ion-no-margin",
                                             styles["close-button"]
                                         )}
-                                        onClick={() =>
-                                            handleCancelFriendRequest()
-                                        }
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            handleCancelFriendRequest();
+                                        }}
                                     >
                                         <IonIcon
                                             slot="icon-only"

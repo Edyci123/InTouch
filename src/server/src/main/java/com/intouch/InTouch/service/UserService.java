@@ -47,6 +47,7 @@ public class UserService {
         user.setUname(updateUserRequest.getUsername());
     }
 
+    @Transactional
     public void register(RegisterRequest registerRequest) throws UserAlreadyExistsException {
 
         if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {

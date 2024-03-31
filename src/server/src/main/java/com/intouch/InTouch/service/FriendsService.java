@@ -9,6 +9,7 @@ import com.intouch.InTouch.utils.dtos.friends.FriendResponse;
 import com.intouch.InTouch.utils.dtos.friends.FriendsListResponse;
 import com.intouch.InTouch.utils.dtos.friends.FriendsListsByStatusResponse;
 import com.intouch.InTouch.utils.enums.FriendshipStatus;
+import com.intouch.InTouch.utils.exceptions.FriendshipAlreadyExistsException;
 import com.intouch.InTouch.utils.exceptions.SameUserFriendshipException;
 import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
 import org.springframework.beans.BeanUtils;
@@ -35,16 +36,27 @@ public class FriendsService {
     }
 
     @Transactional
-    public void createFriendship(String email) throws UserNotFoundException, SameUserFriendshipException {
-        System.out.println(email);
+    public void createFriendship(String email) throws UserNotFoundException, SameUserFriendshipException, FriendshipAlreadyExistsException {
         User user1 = UserUtils.getUserFromOptional(userRepository.findByEmail(UserUtils.getEmail()));
         User user2 = UserUtils.getUserFromOptional(userRepository.findByEmail(email));
         if (user1.equals(user2)) {
             throw new SameUserFriendshipException("You cannot send a friendRequest to yourself!");
         }
 
-        friendsRepository.save(new Friends(user1, user2, FriendshipStatus.SENT));
-        friendsRepository.save(new Friends(user2, user1, FriendshipStatus.PENDING));
+        List<Friends> friendship = friendsRepository.findByUsers(user1, user2);
+
+        if (friendship != null) {
+            if (friendship.get(0).getStatus() == FriendshipStatus.SENT && friendship.get(0).getUser1() == user1 ||
+                    friendship.get(1).getStatus() == FriendshipStatus.SENT && friendship.get(1).getUser1() == user1) {
+                throw new FriendshipAlreadyExistsException("There already exists a friend request sent to " + user2.getUname());
+            } else {
+                friendship.get(0).setStatus(FriendshipStatus.ACCEPTED);
+                friendship.get(1).setStatus(FriendshipStatus.ACCEPTED);
+            }
+        } else {
+            friendsRepository.save(new Friends(user1, user2, FriendshipStatus.SENT));
+            friendsRepository.save(new Friends(user2, user1, FriendshipStatus.PENDING));
+        }
     }
 
     @Transactional
