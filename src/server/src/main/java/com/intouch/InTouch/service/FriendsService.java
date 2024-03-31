@@ -34,16 +34,6 @@ public class FriendsService {
         this.friendsRepository = friendsRepository;
     }
 
-//    public Friends findByUser(int user2Id) throws InstanceNotFoundException {
-//
-//        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-//        User user1 = getUserFromOptional(userRepository.findByEmail(currentUserEmail));
-//
-//        User user2 = getUserFromOptional(userRepository.findById(user2Id));
-//
-//        return friendsRepository.findByUsers(user1, user2);
-//    }
-
     @Transactional
     public void createFriendship(String email) throws UserNotFoundException, SameUserFriendshipException {
         System.out.println(email);

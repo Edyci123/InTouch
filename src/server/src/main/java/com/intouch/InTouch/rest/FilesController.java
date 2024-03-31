@@ -17,7 +17,7 @@ import java.util.Objects;
 @RequestMapping("/files")
 public class FilesController {
 
-    private FilesService filesService;
+    private final FilesService filesService;
 
     public FilesController(FilesService filesService) {
         this.filesService = filesService;

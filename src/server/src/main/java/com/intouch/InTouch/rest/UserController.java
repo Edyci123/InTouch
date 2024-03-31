@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/me")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -19,23 +19,23 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PatchMapping("/update")
+    @GetMapping("/me")
+    public ResponseEntity<?> getMe() throws UserNotFoundException {
+        return ResponseEntity.ok(userService.getCurrentUser());
+    }
+
+    @PatchMapping("/me/update")
     public ResponseEntity<?> updateAccount(@RequestBody PartialUpdateUserRequest updateUserRequest) throws UserNotFoundException {
             userService.partialUpdateUser(updateUserRequest);
             return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping("/users")
+    @GetMapping()
     public ResponseEntity<?> getAllUsers(
             @RequestParam(required = false) String email,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ) {
         return ResponseEntity.ok(userService.getUserPage(email, page, size));
-    }
-
-    @GetMapping
-    public ResponseEntity<?> getMe() throws UserNotFoundException {
-        return ResponseEntity.ok(userService.getCurrentUser());
     }
 }
