@@ -1,5 +1,5 @@
 import { IAccountSettings } from "../models/IAccountSettings";
-import { ILogin, IRegister } from "../models/IAuth";
+import { IForgotPassword, ILogin, IRegister } from "../models/IAuth";
 import { IAuthToken } from "../models/IAuthToken";
 import { IUser } from "../models/IUser";
 import { APIRoutes } from "./APIRoutes";
@@ -11,9 +11,20 @@ export class AuthAPI extends BaseAPI {
         return response.data;
     }
 
+    async accountExists(email: string) {
+        const response = await this.POST(
+            this.url(APIRoutes.auth.accountExists),
+            { email }
+        );
+        return response;
+    }
+
     async updateAccounts(data: IAccountSettings) {
-        const response = await this.PATCH(this.url(APIRoutes.auth.updateAccounts), data);
-        return response
+        const response = await this.PATCH(
+            this.url(APIRoutes.auth.updateAccounts),
+            data
+        );
+        return response;
     }
 
     async login(data: ILogin) {
@@ -22,6 +33,18 @@ export class AuthAPI extends BaseAPI {
             data
         );
         return response.data;
+    }
+
+    async resetCode(email: string) {
+        const response = await this.POST(this.url(APIRoutes.auth.resetCode), {
+            email,
+        });
+        return response;
+    }
+
+    async resetPassword(data: IForgotPassword) {
+        const response = await this.POST(this.url(APIRoutes.auth.resetPassword), data);
+        return response;
     }
 
     async register(data: IRegister) {

@@ -19,11 +19,19 @@ import { api } from "../../services/api/API";
 import { ILogin, zLogin } from "../../services/models/IAuth";
 import { useAuth } from "../../services/storage/auth.store";
 import styles from "./auth.module.scss";
+import classNames from "classnames";
+import { ForgotPassEnterMailModal } from "./Modals/ForgotPassEnterMailModal";
+import { ForgotPassChangePassModal } from "./Modals/ForgotPassChangePassModal";
+import { useForgotPass } from "./fogotPassword.store";
 
 export const Login: React.FC = () => {
     const history = useHistory();
     const [loading, setLoading] = useState(false);
     const [present] = useIonToast();
+
+    const [forgotPassStep1Modal, setForgotPassStep1Modal] = useState(false);
+    const [forgotPassStep2Modal, setForgotPassStep2Modal] = useState(false);
+    const setEmail = useForgotPass((state) => state.setEmail);
 
     const form = useForm<ILogin>({
         mode: "all",
@@ -70,55 +78,97 @@ export const Login: React.FC = () => {
             menu={false}
             noHeader={true}
             title="Login"
-            scrollable={false}
+            //scrollable={false}
             content={
-                <form id="login-form" onSubmit={form.handleSubmit(onSubmit)}>
-                    <IonGrid className="ion-padding">
-                        <IonRow>
-                            <IonCol className="mt-5 mb-5 ion-text-center">
-                                <IonText className="fs-32 fw-700">
-                                    Login
-                                </IonText>
-                            </IonCol>
-                        </IonRow>
-                        <IonRow className="mt-5">
-                            <IonCol size="12">
-                                <IonInput
-                                    mode="md"
-                                    label="Email*"
-                                    label-placement="floating"
-                                    fill="outline"
-                                    type="text"
-                                    //placeholder="Email*"
-                                    {...form.register("email")}
-                                />
-                                {form.formState.errors.email && (
-                                    <IonText color="danger">
-                                        {form.formState.errors.email.message}
+                <>
+                    <form
+                        id="login-form"
+                        onSubmit={form.handleSubmit(onSubmit)}
+                    >
+                        <IonGrid className="ion-padding">
+                            <IonRow>
+                                <IonCol className="mt-5 mb-5 ion-text-center">
+                                    <IonText className="fs-32 fw-700">
+                                        Login
                                     </IonText>
-                                )}
-                            </IonCol>
-                            <IonCol className="mt-1" size="12">
-                                <IonInput
-                                    mode="md"
-                                    {...form.register("password")}
-                                    className={styles["custom-input"]}
-                                    label="Password*"
-                                    label-placement="floating"
-                                    fill="outline"
-                                    type="password"
-                                    placeholder="Password*"
-                                />
-                                {form.formState.errors.password && (
-                                    <IonText color="danger">
-                                        {form.formState.errors.password.message}
-                                    </IonText>
-                                )}
-                            </IonCol>
-                        </IonRow>
-                    </IonGrid>
-                    <IonLoading isOpen={loading} />
-                </form>
+                                </IonCol>
+                            </IonRow>
+                            <IonRow className="mt-5">
+                                <IonCol size="12">
+                                    <IonInput
+                                        mode="md"
+                                        label="Email*"
+                                        label-placement="floating"
+                                        fill="outline"
+                                        type="text"
+                                        //placeholder="Email*"
+                                        {...form.register("email")}
+                                    />
+                                    {form.formState.errors.email && (
+                                        <IonText color="danger">
+                                            {
+                                                form.formState.errors.email
+                                                    .message
+                                            }
+                                        </IonText>
+                                    )}
+                                </IonCol>
+                                <IonCol className="mt-1" size="12">
+                                    <IonInput
+                                        mode="md"
+                                        {...form.register("password")}
+                                        className={styles["custom-input"]}
+                                        label="Password*"
+                                        label-placement="floating"
+                                        fill="outline"
+                                        type="password"
+                                        placeholder="Password*"
+                                    />
+                                    {form.formState.errors.password && (
+                                        <IonText color="danger">
+                                            {
+                                                form.formState.errors.password
+                                                    .message
+                                            }
+                                        </IonText>
+                                    )}
+                                </IonCol>
+                            </IonRow>
+                            <IonRow className="mt-2">
+                                <IonCol>
+                                    <IonButton
+                                        mode="ios"
+                                        fill="clear"
+                                        className={classNames(
+                                            "fs-14 p-0 color-dark-grey text-underline",
+                                            styles["forgot-password-button"]
+                                        )}
+                                        onClick={() =>
+                                            setForgotPassStep1Modal(true)
+                                        }
+                                    >
+                                        Forgot your password?
+                                    </IonButton>
+                                </IonCol>
+                            </IonRow>
+                        </IonGrid>
+
+                        <IonLoading isOpen={loading} />
+                    </form>
+                    <ForgotPassEnterMailModal
+                        isOpen={forgotPassStep1Modal}
+                        onClose={() => setForgotPassStep1Modal(false)}
+                        onSubmit={(email) => {
+                            setForgotPassStep2Modal(true);
+                            setEmail(email);
+                        }}
+                    />
+
+                    <ForgotPassChangePassModal
+                        isOpen={forgotPassStep2Modal}
+                        onClose={() => setForgotPassStep2Modal(false)}
+                    />
+                </>
             }
             footer={
                 <>
@@ -127,7 +177,7 @@ export const Login: React.FC = () => {
                         form="login-form"
                         expand="block"
                         shape="round"
-                        className="ion-padding mt-5"
+                        className="ion-padding mt-4"
                     >
                         Login
                     </IonButton>

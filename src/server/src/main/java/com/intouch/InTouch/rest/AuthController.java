@@ -3,10 +3,10 @@ package com.intouch.InTouch.rest;
 import com.intouch.InTouch.entity.User;
 import com.intouch.InTouch.service.UserService;
 import com.intouch.InTouch.utils.JwtTokenUtil;
-import com.intouch.InTouch.utils.dtos.auth.AuthRequest;
-import com.intouch.InTouch.utils.dtos.auth.AuthResponse;
-import com.intouch.InTouch.utils.dtos.auth.RegisterRequest;
+import com.intouch.InTouch.utils.dtos.auth.*;
+import com.intouch.InTouch.utils.exceptions.InvalidCodeException;
 import com.intouch.InTouch.utils.exceptions.UserAlreadyExistsException;
+import com.intouch.InTouch.utils.exceptions.UserNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,5 +61,23 @@ public class AuthController {
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/reset/code")
+    public ResponseEntity<?> getCode(@RequestBody AuthResetCodeEmail authResetCodeEmail) throws UserNotFoundException {
+        userService.createCode(authResetCodeEmail.getEmail());
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/reset/password")
+    public ResponseEntity<?> resetPassword(@RequestBody AuthCodeAndPassword authCodeAndPassword) throws UserNotFoundException, InvalidCodeException {
+        userService.validateCodeChangePassword(authCodeAndPassword.getEmail(), authCodeAndPassword.getCode(), authCodeAndPassword.getPassword());
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/account/exists")
+    public ResponseEntity<?> checkExistence(@RequestBody AccountExistence accountExistence) throws UserNotFoundException {
+        userService.checkUserExistence(accountExistence.getEmail());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

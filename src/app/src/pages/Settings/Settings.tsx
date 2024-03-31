@@ -1,31 +1,28 @@
-import React, { useState } from "react";
-import { BasePage } from "../../components/BasePage/BasePage";
+import { Camera, CameraResultType } from "@capacitor/camera";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
     IonButton,
     IonCol,
     IonGrid,
     IonIcon,
-    IonImg,
     IonInput,
-    IonItem,
     IonLabel,
     IonLoading,
-    IonRouterLink,
     IonRow,
     IonText,
-    useIonToast,
+    useIonToast
 } from "@ionic/react";
+import { camera } from "ionicons/icons";
+import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { BasePage } from "../../components/BasePage/BasePage";
+import { api } from "../../services/api/API";
 import {
     IAccountSettings,
     zAccountSettings,
 } from "../../services/models/IAccountSettings";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useGlobal } from "../../services/storage/global.store";
-import { api } from "../../services/api/API";
-import { camera } from "ionicons/icons";
 import styles from "./settings.module.scss";
-import { Camera, CameraResultType } from "@capacitor/camera";
 
 export const Settings: React.FC = () => {
     const [user, setUser] = useGlobal((state) => [state.user, state.setUser]);

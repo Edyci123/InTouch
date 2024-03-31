@@ -38,6 +38,14 @@ public class User implements UserDetails {
     @Column(name = "photo_uri")
     private String photoUri;
 
+    @JsonIgnore
+    @Column(name = "code")
+    private String code;
+
+    @JsonIgnore
+    @Column(name = "code_attempts")
+    private int attempts = 0;
+
 
     public User(String email, String password) {
         this.email = email;
