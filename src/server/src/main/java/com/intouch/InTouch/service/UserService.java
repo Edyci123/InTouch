@@ -55,6 +55,7 @@ public class UserService {
 
         User user = new User();
         BeanUtils.copyProperties(registerRequest, user);
+        user.setUname(registerRequest.getUsername());
         user.setPassword(encodedPassword(registerRequest.getPassword()));
         userRepository.save(user);
     }
@@ -71,7 +72,7 @@ public class UserService {
         }
 
         userList = pageUsers.getContent().stream()
-                .map(val -> new UserResponse(val.getEmail(), val.getUsername(), val.getAccount(), val.getPhotoUri()))
+                .map(val -> new UserResponse(val.getEmail(), val.getUname(), val.getAccount(), val.getPhotoUri()))
                 .filter(val -> !Objects.equals(val.getEmail(), UserUtils.getEmail()))
                 .collect(Collectors.toList());
          Map<String, Object> res = new HashMap<>();
