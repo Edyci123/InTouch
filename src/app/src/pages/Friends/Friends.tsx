@@ -153,7 +153,15 @@ export const Friends: React.FC = () => {
 											<FriendCard
 												friend={friend}
 												handleClick={() => {
-													setFriendDetailsModal(friend);
+													if (searchParams.status === FriendshipStatus.accepted ) {
+														setFriendDetailsModal(friend);
+													} else {
+														present({
+															duration: 1000,
+															message: "You can't see the details unless you're friends!",
+															position: "bottom",	
+														})
+													}
 												}}
 												handleAcceptFriendRequest={async () => {
 													await api.friends.acceptFriendRequest(friend.id);
