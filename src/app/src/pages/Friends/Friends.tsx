@@ -22,7 +22,7 @@ import { api } from "../../services/api/API";
 import { ISearchFriends, ISearchResult } from "../../services/api/FriendsAPI";
 import { FriendshipStatus, IFriends } from "../../services/models/IFriends";
 import { FriendCard } from "./FriendCard";
-import { QRModal } from "./Modals/ShowQRModal";
+import { QRModal } from "./Modals/QRModal";
 import { FriendDetailsModal } from "./Modals/FriendDetailsModal";
 
 export const Friends: React.FC = () => {
